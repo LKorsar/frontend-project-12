@@ -4,8 +4,11 @@
   "description": "Chat-app",
   "main": "index.js",
   "scripts": {
+    "build": "npm run build",
+    "start": "npx start-server -s ./frontend/build",
+    "postinstall": "npm ci --prefix frontend",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "AkimkinaM",
   "license": "ISC"
 }

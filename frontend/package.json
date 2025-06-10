@@ -5,11 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run build --prefix frontend",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "start": "start-server -s ./frontend/build",
-    "postinstall": "cd frontend && npm ci"
+    "build": "vite build",
+    "start": "npx start-server -s ./build",
+    "preview": "vite preview"
   },
   "eslintConfig": {
     "extends": [
