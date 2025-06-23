@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "start-server -s ./frontend/dist",
-    "build": "npm run build --prefix frontend",
+    "build": "npm ci && npm run build --prefix frontend",
     "postinstall": "cd frontend && npm ci"
   },
   "author": "AkimkinaM",
