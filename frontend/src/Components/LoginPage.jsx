@@ -1,6 +1,7 @@
 import { useRef, useEffect } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form, Button} from 'react-bootstrap';
 
 const LoginPage = () => {
@@ -27,7 +28,7 @@ const LoginPage = () => {
                 <div className="card shadow-sm">
                   <div className="card-body row p-5">
                     <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
-                      <img src="#" className="rounded-circle" alt="Войти" />
+                      <img src="/src/assets/avatar.jpg" className="rounded-circle" alt="Войти" />
                     </div>
                     <Form className="col-12 col-md-6 mt-3 mt-md-0" onSubmit={formik.handleSubmit}>
                       <h1 className="text-center mb-4">Войти</h1>
@@ -56,12 +57,12 @@ const LoginPage = () => {
                         ></Form.Control>
                         <Form.Label htmlFor="password">Пароль</Form.Label>
                       </Form.Group>
-                      <Button type="submit" className="w-100 mb-3 btn-outline-primary btn">Войти</Button>
+                      <Button type="submit" className="w-100 mb-3 btn btn-outline-primary">Войти</Button>
                     </Form>
                   </div>
                   <div className="card-footer p-4">
                     <div className="text-center">
-                      <span>Нет аккаунта?</span>
+                      <span>Нет аккаунта? </span>
                       <a href="/signup">Регистрация</a>
                     </div>
                   </div>
