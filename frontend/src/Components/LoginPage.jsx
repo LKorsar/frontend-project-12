@@ -28,8 +28,9 @@ const LoginPage = () => {
       setAuthFailed(false);
       try {
         const response = await axios.post('/api/v1/login', values);
+        console.log(response.status);
         localStorage.setItem('userId', JSON.stringify(response.data));
-        console.log(JSON.parse(localStorage.getItem()));
+        console.log(JSON.parse(localStorage.getItem('userId')));
         auth.logIn();
         const { from } = location.state;
         console.log(location);
