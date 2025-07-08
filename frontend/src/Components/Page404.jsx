@@ -1,14 +1,15 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button } from 'react-bootstrap';
 
 const Page404 = () => {
-  const handleClick = () => {};
-    return (
+  const location = useLocation();
+  
+  return (
     <div className="container-fluid">
         <h1>Error 404 Not Found</h1>
         <p>Страница удалена или в ссылке опечатка</p>
-        <Button className="btn btn-primary" onClick={handleClick}>Вернуться на главную страницу</Button>
+        <Button className="btn btn-primary" as={Link} to="/login" state={{ from: location }}>Вернуться на главную страницу</Button>
     </div>
   );
 };

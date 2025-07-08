@@ -1,16 +1,50 @@
-import { useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form, Button} from 'react-bootstrap';
+import axios from 'axios';
+import AuthContext from "../contexts/context";
 
 const LoginPage = () => {
+  const [authFailed, setAuthFailed] = useState(false);
+
+  const auth = useContext(AuthContext);
+
+  const inputRef = useRef();
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
         username: '',
         password: '',
     },
-    onSubmit: () => {},
+    onSubmit: async (values) => {
+      setAuthFailed(false);
+      try {
+        const response = await axios.post('/api/v1/login', values);
+        localStorage.setItem('userId', JSON.stringify(response.data));
+        console.log(JSON.parse(localStorage.getItem()));
+        auth.logIn();
+        const { from } = location.state;
+        console.log(location);
+        console.log(from);
+        navigate(from);
+      }
+      catch(error) {
+        formik.setSubmitting(false);
+        if (error.isAxiosError && error.response.status === 401) {
+          setAuthFailed(true);
+          inputRef.current.select();
+        }
+        throw error;
+      }
+    },
   });
 
   return (
@@ -39,8 +73,10 @@ const LoginPage = () => {
                           required
                           placeholder="Ваш ник"
                           id="username"
+                          isInvalid={authFailed}
                           value={formik.values.username}
                           onChange={formik.handleChange}
+                          ref={inputRef}
                         ></Form.Control>
                         <Form.Label htmlFor="username">Ваш ник</Form.Label>
                       </Form.Group>
@@ -53,11 +89,13 @@ const LoginPage = () => {
                           type="password"
                           id="password"
                           value={formik.values.password}
+                          isInvalid={authFailed}
                           onChange={formik.handleChange}
                         ></Form.Control>
                         <Form.Label htmlFor="password">Пароль</Form.Label>
+                        <Form.Control.Feedback type="invalid">Неверные имя пользователя или пароль</Form.Control.Feedback>
                       </Form.Group>
-                      <Button type="submit" className="w-100 mb-3 btn btn-outline-primary">Войти</Button>
+                      <Button type="submit" className="w-100 mb-3 btn" variant="outline-primary">Войти</Button>
                     </Form>
                   </div>
                   <div className="card-footer p-4">
