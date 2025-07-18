@@ -20,7 +20,7 @@ const MainPage = () => {
   const userId = JSON.parse(localStorage.getItem('token'));
 
   const dispatch = useDispatch();
-  const channels = useSelector((state) => state.channels);
+  const channels = useSelector((state) => state.authReducer.channels);
   console.log(channels);
 
   useEffect(() => {

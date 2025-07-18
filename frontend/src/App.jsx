@@ -8,7 +8,7 @@ import RegistrationPage from './Components/RegistrationPage';
 import { store } from './Slices/index.jsx'
 
 const PrivateRoot = ({ children }) => {
-  const loggedIn = useSelector((state) => state.auth.isAuthenticated);
+  const loggedIn = useSelector((state) => state.authReducer.isAuthenticated);
   const location = useLocation();
   
   return (
