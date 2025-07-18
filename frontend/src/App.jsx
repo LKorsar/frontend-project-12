@@ -1,41 +1,24 @@
-import { useState, useContext } from 'react';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Provider, useSelector } from 'react-redux';
 import LoginPage from './Components/LoginPage';
 import Page404 from './Components/Page404';
 import MainPage from './Components/MainPage';
 import RegistrationPage from './Components/RegistrationPage';
-import AuthContext from './contexts/context';
-
-const AuthProvider = ({ children }) => {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const logIn = () => setLoggedIn(true);
-  const logOut = () => {
-    localStorage.removeItem('userId');
-    setLoggedIn(false);
-  };
-
-  return (
-    <AuthContext.Provider value={{ loggedIn, logIn, logOut }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
+import { store } from './Slices/index.jsx'
 
 const PrivateRoot = ({ children }) => {
-  const auth = useContext(AuthContext);
+  const loggedIn = useSelector((state) => state.auth.isAuthenticated);
   const location = useLocation();
-  console.log(auth.loggedIn);
-
+  
   return (
-    auth.loggedIn ? children : <Navigate to="/login" state={{ from: location }} />
+    loggedIn ? children : <Navigate to="/login" state={{ from: location }} />
   );
 };
 
 const App = () => {
-
   return (
-    <AuthProvider>
+    <Provider store={store}>
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
@@ -52,8 +35,8 @@ const App = () => {
           </Route>  
         </Routes>
       </BrowserRouter>
-    </AuthProvider>
-  )
+    </Provider>
+  );
 };
 
 export default App;

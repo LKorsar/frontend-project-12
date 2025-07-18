@@ -1,15 +1,16 @@
-import { useState, useRef, useEffect, useContext } from "react";
+import { useRef, useEffect } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Form, Button} from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import axios from 'axios';
-import AuthContext from "../contexts/context";
+import { useDispatch } from 'react-redux';
+import { logInSuccess, logOutSuccess } from './Slices/authSlice';
 
 const LoginPage = () => {
-  const [authFailed, setAuthFailed] = useState(false);
-
-  const auth = useContext(AuthContext);
+  const dispatch = useDispatch();
+  const logIn = (user) => dispatch(logInSuccess(user));
+  const logOut = () => dispatch(logOutSuccess());
 
   const inputRef = useRef();
   useEffect(() => {
@@ -25,22 +26,19 @@ const LoginPage = () => {
         password: '',
     },
     onSubmit: async (values) => {
-      setAuthFailed(false);
       try {
         const response = await axios.post('/api/v1/login', values);
         console.log(response.status);
-        localStorage.setItem('userId', JSON.stringify(response.data));
-        console.log(JSON.parse(localStorage.getItem('userId')));
-        auth.logIn();
+        localStorage.setItem('token', JSON.stringify(response.data));
+        console.log(JSON.parse(localStorage.getItem('token')));
+        logIn(values.username);
         const { from } = location.state;
-        console.log(location);
-        console.log(from);
         navigate(from);
       }
       catch(error) {
         formik.setSubmitting(false);
         if (error.isAxiosError && error.response.status === 401) {
-          setAuthFailed(true);
+          logOut();
           inputRef.current.select();
         }
         throw error;
