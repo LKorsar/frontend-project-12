@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form, Button } from 'react-bootstrap';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { logInSuccess, logOutSuccess } from './Slices/authSlice';
+import { logInSuccess, logOutSuccess } from './Slices/authSlice.jsx';
 
 const LoginPage = () => {
   const dispatch = useDispatch();

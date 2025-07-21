@@ -5,8 +5,8 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
-import { setChannels } from '../Slices/channelsSlice';
-import { logOutSuccess } from '../Slices/authSlice';
+import { setChannels } from '../Slices/channelsSlice.jsx';
+import { logOutSuccess } from '../Slices/authSlice.jsx';
 
 const getAuthHeader = () => {
   const userId = JSON.parse(localStorage.getItem('token'));
