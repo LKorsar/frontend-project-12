@@ -1,12 +1,12 @@
+/* eslint-disable react/prop-types */
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
-import { Provider, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import LoginPage from './Components/LoginPage';
 import Page404 from './Components/Page404';
 import MainPage from './Components/MainPage';
 import RegistrationPage from './Components/RegistrationPage';
-import { store } from './Slices/index.jsx';
   
   const PrivateRoot = ({ children }) => {
   const loggedIn = useSelector((state) => state.authReducer.isAuthenticated);
@@ -19,7 +19,6 @@ import { store } from './Slices/index.jsx';
 
 const App = () => {
   return (
-    <Provider store={store}>
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
@@ -36,7 +35,6 @@ const App = () => {
           </Route>  
         </Routes>
       </BrowserRouter>
-    </Provider>
   );
 };
 
