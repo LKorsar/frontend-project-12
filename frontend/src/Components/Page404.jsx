@@ -1,6 +1,7 @@
 import { useLocation, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button } from 'react-bootstrap';
+import React from 'react';
 
 const Page404 = () => {
   const location = useLocation();

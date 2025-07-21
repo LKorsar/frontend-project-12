@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react";
-import { useFormik, ErrorMessage } from "formik";
-import { Link, useLocation, Navigate } from "react-router-dom";
+import React, { useEffect, useRef } from "react";
+import { useFormik } from "formik";
+import { useLocation, Navigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form, Button} from 'react-bootstrap';
 import * as Yup from "yup";
@@ -11,7 +11,7 @@ const RegistrationPage = () => {
 
   const inputRef = useRef();
   useEffect(() => {
-    
+    inputRef.current.focus();
   }, []);
 
   const yupValidationSchema = Yup.object().shape({
@@ -73,6 +73,7 @@ const RegistrationPage = () => {
                           isInvalid={yupValidationSchema}
                           value={formik.values.username}
                           onChange={formik.handleChange}
+                          ref={inputRef}
                         />
                         <Form.Label htmlFor="username">Имя пользователя</Form.Label>
                         <Form.Control.Feedback type="invalid">От 3 до 20 символов</Form.Control.Feedback>

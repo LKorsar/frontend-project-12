@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -20,6 +20,8 @@ const LoginPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const [authFailed, setAuthFailed] = useState(null);
+
   const formik = useFormik({
     initialValues: {
         username: '',
@@ -39,6 +41,7 @@ const LoginPage = () => {
         formik.setSubmitting(false);
         if (error.isAxiosError && error.response.status === 401) {
           logOut();
+          setAuthFailed(true);
           inputRef.current.select();
         }
         throw error;

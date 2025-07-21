@@ -1,13 +1,14 @@
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import React from 'react';
 import { Provider, useSelector } from 'react-redux';
 import LoginPage from './Components/LoginPage';
 import Page404 from './Components/Page404';
 import MainPage from './Components/MainPage';
 import RegistrationPage from './Components/RegistrationPage';
-import { store } from './Slices/index.jsx'
-
-const PrivateRoot = ({ children }) => {
+import { store } from './Slices/index.jsx';
+  
+  const PrivateRoot = ({ children }) => {
   const loggedIn = useSelector((state) => state.authReducer.isAuthenticated);
   const location = useLocation();
   

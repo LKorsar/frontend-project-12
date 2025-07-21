@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button } from 'react-bootstrap';
 import { Navigate, useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
@@ -27,13 +27,9 @@ const MainPage = () => {
 
   useEffect(() => {
     const fetchChannels = async () => {
-      try {
-        const response = await axios.get('/api/v1/channels', { headers: getAuthHeader() });
-        console.log(response.data);
-        dispatch(setChannels(response.data));
-      } catch (err) {
-        console.err;
-      }
+      const response = await axios.get('/api/v1/channels', { headers: getAuthHeader() });
+      console.log(response.data);
+      dispatch(setChannels(response.data)); 
     };
     fetchChannels();
   }, [channels]);
@@ -85,7 +81,7 @@ const MainPage = () => {
                   <ul id="channels-box" className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
                     {channels.map((channel) => {
                       return (
-                      <li className="nav-item w-100">
+                      <li key={channel.id} className="nav-item w-100">
                         <Button type="button" className="w-100 rounded-0 text-start btn btn-secondary">
                           <span className="me-1">#</span>
                           {channel.name}
@@ -124,7 +120,7 @@ const MainPage = () => {
                               className="bi bi-arrow-right-square"
                             >
                               <path
-                              fill-rule="evenodd"
+                              fillRule="evenodd"
                               d="M 15 2 a 1 1 0 0 0 -1 -1 H 2 a 1 1 0 0 0 -1 1 v 12 a 1 1 0 0 0 1 1 h 12 a 1 1 0 0 0 1 -1 Z M 0 2 a 2 2 0 0 1 2 -2 h 12 a 2 2 0 0 1 2 2 v 12 a 2 2 0 0 1 -2 2 H 2 a 2 2 0 0 1 -2 -2 Z m 4.5 5.5 a 0.5 0.5 0 0 0 0 1 h 5.793 l -2.147 2.146 a 0.5 0.5 0 0 0 0.708 0.708 l 3 -3 a 0.5 0.5 0 0 0 0 -0.708 l -3 -3 a 0.5 0.5 0 1 0 -0.708 0.708 L 10.293 7.5 Z"
                               ></path>
                             </svg>
