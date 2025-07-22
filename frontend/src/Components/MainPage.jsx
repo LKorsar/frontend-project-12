@@ -22,7 +22,7 @@ const MainPage = () => {
   const userId = JSON.parse(localStorage.getItem('token'));
 
   const dispatch = useDispatch();
-  const channels = useSelector((state) => state.authReducer.channels);
+  const channels = useSelector((state) => state.channelsReducer.channels);
   console.log(channels);
 
   useEffect(() => {
@@ -33,6 +33,8 @@ const MainPage = () => {
     };
     fetchChannels();
   }, [channels]);
+
+  console.log(channels);
 
   const handleClickLogOut = () => {
     dispatch(logOutSuccess());
