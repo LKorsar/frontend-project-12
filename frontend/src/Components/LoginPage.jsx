@@ -9,7 +9,7 @@ import { logInSuccess, logOutSuccess } from '../Slices/authSlice.jsx';
 
 const LoginPage = () => {
   const dispatch = useDispatch();
-  const logIn = (user) => dispatch(logInSuccess(user));
+  const logIn = (user) => dispatch(logInSuccess({ username: user }));
   const logOut = () => dispatch(logOutSuccess());
 
   const inputRef = useRef();
@@ -30,9 +30,7 @@ const LoginPage = () => {
     onSubmit: async (values) => {
       try {
         const response = await axios.post('/api/v1/login', values);
-        console.log(response.status);
         localStorage.setItem('token', JSON.stringify(response.data));
-        console.log(JSON.parse(localStorage.getItem('token')));
         logIn(values.username);
         const { from } = location.state;
         navigate(from);

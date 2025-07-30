@@ -1,56 +1,79 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button } from 'react-bootstrap';
 import { Navigate, useLocation } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
-import { setChannels } from '../Slices/channelsSlice.jsx';
+import { getChannels, addChannel, editChannel, removeChannel } from '../services/channelsApi.js';
 import { logOutSuccess } from '../Slices/authSlice.jsx';
-
-const getAuthHeader = () => {
-  const userId = JSON.parse(localStorage.getItem('token'));
-  if (userId && userId.token) {
-    return { Authorization: `Bearer ${userId.token}` };
-  }
-  return {};
-};
+import { getMessages, addMessage } from '../services/messagesApi.js';
+import CustomSpinner from './Spinner.jsx';
 
 const MainPage = () => {
   const location = useLocation();
 
   const userId = JSON.parse(localStorage.getItem('token'));
+  const currentUser = useSelector((state) => state.authReducer.user);
 
   const dispatch = useDispatch();
-  const channels = useSelector((state) => state.channelsReducer.channels);
-  console.log(channels);
-
-  useEffect(() => {
-    const fetchChannels = async () => {
-      const response = await axios.get('/api/v1/channels', { headers: getAuthHeader() });
-      console.log(response.data);
-      dispatch(setChannels(response.data)); 
-    };
-    fetchChannels();
-  }, [channels]);
-
-  console.log(channels);
-
   const handleClickLogOut = () => {
     dispatch(logOutSuccess());
   };
 
-  const [newMessage, setNewMessage] = useState('');
-  const handleSetNewMessage = (event) => {
-    setNewMessage(event.target.value);
+  const { data: channels, isLoading: isLoadingChannels, refetch: refetchChannels } = getChannels();
+  const [renameChannel] = editChannel();
+  const [deleteChannel] = removeChannel();
+  const [addNewChannel] = addChannel();
+
+  const handleAddChannel = (newChannel) => {
+    addNewChannel({ name: newChannel });
+    refetch();
+  };
+  const handleDeleteChannel = (id) => {
+    deleteChannel(id);
+    refetchChannels();
+  };
+  const handleRenameChannel = (id, newName) => {
+    renameChannel(id, { name: newName } );
+    refetchChannels();
   };
 
-  const btnClass = classNames(
-    'btn', 'btn-group-vertical',
+  const { data: messages, refetch: refetchMessages } = getMessages();
+  const [addNewMessage] = addMessage();
+  const [newMessage, setNewMessage] = useState('');
+
+  const messageBtnClass = classNames(
+    'btn', 'btn-group-vertical', 'btn-light',
     { disabled: newMessage === '' ? true : false },
   );
 
+  const [activeChannel, setActiveChannel] = useState({ name: 'general', id: 1 });
+  useEffect(() => {
+    if (channels && channels.length > 0) {
+      setActiveChannel(channels[0]);
+  }
+  }, [channels]);
+  
+  const [messagesCount, setMessagesCount] = useState(0);
+  useEffect(() => {
+    if (messages && messages.length > 0) {
+      const messagesOfActiveChannel = messages.filter((message) => message.channelId === activeChannel.id);
+      setMessagesCount(messagesOfActiveChannel.length);
+    }
+  }, [activeChannel, messages]);
+
+  const handleSubmitMessage = (e) => {
+    e.preventDefault();
+    const messageToAdd = { body: newMessage, channelId: activeChannel.id, username: currentUser };
+    addNewMessage(messageToAdd);
+    refetchMessages();
+    setNewMessage('');
+  };
+  
   if (userId && userId.token) {
+    if (isLoadingChannels) {
+      return <CustomSpinner />;
+    }
     return (
       <div className="h-100">
         <div className="h-100" id="chat">
@@ -66,7 +89,7 @@ const MainPage = () => {
                 <div className="col col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
                   <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
                     <b>Каналы</b>
-                    <Button type="button" className="p-0 text-primary btn btn-group-vertical">
+                    <Button type="button" className="p-0 text-primary btn btn-light btn-group-vertical">
                       <svg 
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 16 16"
@@ -82,9 +105,13 @@ const MainPage = () => {
                   </div>
                   <ul id="channels-box" className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
                     {channels.map((channel) => {
+                      const channelBtnclass = classNames(
+                        'w-100', 'rounded-0', 'text-start', 'btn',
+                        channel.id === activeChannel.id ? 'btn-secondary' : 'btn-light',
+                      );
                       return (
                       <li key={channel.id} className="nav-item w-100">
-                        <Button type="button" className="w-100 rounded-0 text-start btn btn-secondary">
+                      <Button type="button" className={channelBtnclass} onClick={() => setActiveChannel(channel)}>
                           <span className="me-1">#</span>
                           {channel.name}
                         </Button>
@@ -96,13 +123,20 @@ const MainPage = () => {
                   <div className="d-flex flex-column h-100">
                     <div className="bg-light mb-4 p-3 shadow-sm small">
                       <p className="m-0">
-                        <b>#</b>
+                        <b>{`# ${activeChannel.name}`}</b>
                       </p>
-                      <span className="text-muted">0 сообщений</span>
+                      <span className="text-muted">{`${messagesCount} сообщений`}</span>
                     </div>
-                    <div id="messages-box" className="chat-messages overflow-auto px-5"></div>
+                    <div id="messages-box" className="chat-messages overflow-auto px-5">
+                      {messages && messages.filter((message) => message.channelId === activeChannel.id).map((message) => {
+                        return (<div key={message.id} className="text-break mb-2">
+                          <b>{message.username}</b>
+                          {`: ${message.body}`}
+                        </div>)
+                      })}
+                    </div>
                     <div className="mt-auto px-5 py-3">
-                      <form className="py-1 boarder rounded-2">
+                      <form className="py-1 boarder rounded-2" onSubmit={handleSubmitMessage}>
                         <div className="input-group has-validation">
                           <input
                             name="body"
@@ -110,9 +144,9 @@ const MainPage = () => {
                             placeholder="Введите сообщение..."
                             className="border-0 p-0 ps-2 form-control"
                             value={newMessage}
-                            onChange={handleSetNewMessage}
+                            onChange={(event) => setNewMessage(event.target.value)}
                             ></input>
-                          <Button type="submit" className={btnClass}>
+                          <Button type="submit" className={messageBtnClass}>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               viewBox="0 0 16 16"

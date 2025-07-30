@@ -8,4 +8,4 @@ start-backend:
 	npx start-server -s ./frontend/dist
 
 start-frontend:
-	make -C frontend start
+	make -C frontend dev

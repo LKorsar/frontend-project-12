@@ -10,5 +10,12 @@ export default defineConfig([
   {
 		ignores: ["dist/*", "build/*", "/node_modules/*"],
 	},
+  { 
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    }
+  },
   pluginReact.configs.flat.recommended,
 ]);
