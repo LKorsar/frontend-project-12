@@ -8,13 +8,21 @@ import { getChannels, addChannel, editChannel, removeChannel } from '../services
 import { logOutSuccess } from '../Slices/authSlice.jsx';
 import { getMessages, addMessage } from '../services/messagesApi.js';
 import CustomSpinner from './Spinner.jsx';
+import chooseModal from '../modals/index.js';
+
+const renderModal = (modalType, handleAddChannel, hideModal) => {
+  if (!modalType.type) {
+    return null;
+  }
+  const Component = chooseModal(modalType.type);
+  return <Component modalType={modalType} handleAddChannel={handleAddChannel} onHide={hideModal} />;
+};
 
 const MainPage = () => {
   const location = useLocation();
 
   const userId = JSON.parse(localStorage.getItem('token'));
   const currentUser = useSelector((state) => state.authReducer.user);
-
   const dispatch = useDispatch();
   const handleClickLogOut = () => {
     dispatch(logOutSuccess());
@@ -27,7 +35,7 @@ const MainPage = () => {
 
   const handleAddChannel = (newChannel) => {
     addNewChannel({ name: newChannel });
-    refetch();
+    refetchChannels();
   };
   const handleDeleteChannel = (id) => {
     deleteChannel(id);
@@ -49,7 +57,7 @@ const MainPage = () => {
 
   const [activeChannel, setActiveChannel] = useState({ name: 'general', id: 1 });
   useEffect(() => {
-    if (channels && channels.length > 0) {
+    if (channels && channels.length > 0 && channels[0].id !== activeChannel.id) {
       setActiveChannel(channels[0]);
   }
   }, [channels]);
@@ -69,12 +77,20 @@ const MainPage = () => {
     refetchMessages();
     setNewMessage('');
   };
-  
+
+  const [modalType, setModalType] = useState({ type: null, item: null });
+  const hideModal = () => setModalType({ type: null, item: null });
+  const showModal = (type, item = 0) => {
+    console.log('Showing modal:', type, item);
+    setModalType({ type, item })
+  };
+
   if (userId && userId.token) {
     if (isLoadingChannels) {
       return <CustomSpinner />;
     }
     return (
+      <>
       <div className="h-100">
         <div className="h-100" id="chat">
           <div className="d-flex flex-column h-100">
@@ -89,7 +105,7 @@ const MainPage = () => {
                 <div className="col col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
                   <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
                     <b>Каналы</b>
-                    <Button type="button" className="p-0 text-primary btn btn-light btn-group-vertical">
+                    <Button type="button" className="p-0 text-primary btn btn-light btn-group-vertical" onClick={() => showModal('adding')}>
                       <svg 
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 16 16"
@@ -111,10 +127,32 @@ const MainPage = () => {
                       );
                       return (
                       <li key={channel.id} className="nav-item w-100">
-                      <Button type="button" className={channelBtnclass} onClick={() => setActiveChannel(channel)}>
-                          <span className="me-1">#</span>
-                          {channel.name}
-                        </Button>
+                        <div role="group" className="d-flex dropdown btn-group">
+                          <Button type="button" className={channelBtnclass} onClick={() => setActiveChannel(channel)}>
+                            <span className="me-1">#</span>
+                            {channel.name}
+                          </Button>
+                          <Button 
+                            type="button"
+                            aria-expanded="false"
+                            className="flex-grow-0 dropdown-toggle dropdown-toggle-split btn btn-secondary"
+                            id={channel.id}
+                          >
+                            <span className="visually-hidden">Управление каналом</span>
+                          </Button>
+                          <div 
+                            x-placement="bottom-start"
+                            className="dropdown-menu"
+                            data-popper-reference-hidden='false'
+                            data-popper-escaped="false"
+                            data-popper-placement="bottom-start"
+                            aria-labelledby={channel.id}
+                            style={ { position: "absolute", inset: "0px auto auto 0px", transform: "translate3d(-8px, 40px, 0px)" } }
+                          >
+                            <a data-rr-ui-dropdown-item role="button" className="dropdown-item" tabIndex="0" href="#">Удалить</a>
+                            <a data-rr-ui-dropdown-item role="button" className="dropdown-item" tabIndex="0" href="#">Переименовать</a>
+                          </div>
+                        </div>
                       </li>);
                     })}
                   </ul>
@@ -173,9 +211,12 @@ const MainPage = () => {
           <div className="Toastify"></div>
         </div>
       </div>
+      <div>
+        {modalType && renderModal(modalType, handleAddChannel, hideModal)}
+      </div>
+      </>
     );
   }
-  console.log('token is missing');
   return (
   <Navigate to='/login' state={{ from: location }} />
   );
