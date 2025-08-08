@@ -9,11 +9,11 @@ import MainPage from './Components/MainPage';
 import RegistrationPage from './Components/RegistrationPage';
   
   const PrivateRoot = ({ children }) => {
-  const loggedIn = useSelector((state) => state.authReducer.isAuthenticated);
   const location = useLocation();
+  const userId = JSON.parse(localStorage.getItem('token'));
   
   return (
-    loggedIn ? children : <Navigate to="/login" state={{ from: location }} />
+    userId ? children : <Navigate to="/login" state={{ from: location }} />
   );
 };
 

@@ -26,6 +26,7 @@ const MainPage = () => {
   const dispatch = useDispatch();
   const handleClickLogOut = () => {
     dispatch(logOutSuccess());
+    localStorage.removeItem('token');
   };
 
   const { data: channels, isLoading: isLoadingChannels, refetch: refetchChannels } = getChannels();
@@ -85,7 +86,7 @@ const MainPage = () => {
     setModalType({ type, item })
   };
 
-  if (userId && userId.token) {
+  if (userId) {
     if (isLoadingChannels) {
       return <CustomSpinner />;
     }

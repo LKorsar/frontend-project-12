@@ -11,3 +11,5 @@ export default configureStore({
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(channelsApi.middleware).concat(messagesApi.middleware),
 });
+
+/* setupListeners(store.dispatch) */
