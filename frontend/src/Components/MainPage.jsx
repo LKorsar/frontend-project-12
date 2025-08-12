@@ -9,6 +9,8 @@ import { logOutSuccess } from '../Slices/authSlice.jsx';
 import { getMessages, addMessage } from '../services/messagesApi.js';
 import CustomSpinner from './Spinner.jsx';
 import chooseModal from '../modals/index.js';
+import { socket } from '../services/socket.js';
+import { setMessages } from '../Slices/messagesSlice.jsx';
 
 const renderModal = (modalType, handleAddChannel, hideModal) => {
   if (!modalType.type) {
@@ -23,6 +25,7 @@ const MainPage = () => {
 
   const userId = JSON.parse(localStorage.getItem('token'));
   const currentUser = useSelector((state) => state.authReducer.user);
+  console.log(currentUser);
   const dispatch = useDispatch();
   const handleClickLogOut = () => {
     dispatch(logOutSuccess());
@@ -55,6 +58,18 @@ const MainPage = () => {
     'btn', 'btn-group-vertical', 'btn-light',
     { disabled: newMessage === '' ? true : false },
   );
+ 
+  useEffect(() => {
+    const handleNewMessage = (payload) => {
+      console.log('refetching message');
+      const messagesInStore = useSelector((state) => state.messagesReducer.messages);
+      dispatch(setMessages([...messagesInStore, payload]));
+    };
+    socket.on('newMessage', handleNewMessage);
+    return () => {
+      socket.off('newMessage', handleNewMessage);
+    };
+  });
 
   const [activeChannel, setActiveChannel] = useState({ name: 'general', id: 1 });
   useEffect(() => {
