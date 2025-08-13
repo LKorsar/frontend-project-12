@@ -9,7 +9,6 @@ import { logOutSuccess } from '../Slices/authSlice.jsx';
 import { getMessages, addMessage } from '../services/messagesApi.js';
 import CustomSpinner from './Spinner.jsx';
 import chooseModal from '../modals/index.js';
-import { socket } from '../services/socket.js';
 import { setMessages } from '../Slices/messagesSlice.jsx';
 
 const renderModal = (modalType, handleAddChannel, hideModal) => {
@@ -58,18 +57,6 @@ const MainPage = () => {
     'btn', 'btn-group-vertical', 'btn-light',
     { disabled: newMessage === '' ? true : false },
   );
- 
-  useEffect(() => {
-    const handleNewMessage = (payload) => {
-      console.log('refetching message');
-      const messagesInStore = useSelector((state) => state.messagesReducer.messages);
-      dispatch(setMessages([...messagesInStore, payload]));
-    };
-    socket.on('newMessage', handleNewMessage);
-    return () => {
-      socket.off('newMessage', handleNewMessage);
-    };
-  });
 
   const [activeChannel, setActiveChannel] = useState({ name: 'general', id: 1 });
   useEffect(() => {

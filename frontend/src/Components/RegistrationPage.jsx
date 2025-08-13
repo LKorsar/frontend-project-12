@@ -1,12 +1,16 @@
-import React, { useEffect, useRef } from "react";
-import { useFormik } from "formik";
+import React, { useEffect, useRef, useState } from "react";
 import { useLocation, Navigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Form, Button} from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import * as Yup from "yup";
-import axios from "axios";
+import axios, { formToJSON } from "axios";
 
 const RegistrationPage = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [formIsValid, setFormIsValid] = useState(null);
+
   const location = useLocation();
 
   const inputRef = useRef();
@@ -16,35 +20,38 @@ const RegistrationPage = () => {
 
   const yupValidationSchema = Yup.object().shape({
     username: Yup.string()
+      .required('Обязательное поле')
       .min(3, 'От 3 до 20 символов')
-      .max(20, 'От 3 до 20 символов')
-      .required('Обязательное поле'),
+      .max(20, 'От 3 до 20 символов'),
     password: Yup.string()
-      .min(6, 'Не менее 6 символов')
-      .required('Обязательное поле'),
+      .required('Обязательное поле')
+      .min(6, 'Не менее 6 символов'),
     confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password'), null], 'Пароли должны совпадать')
-      .required('Обязательное поле'),
+      .oneOf([Yup.ref('password'), null], 'Пароли должны совпадать'),
   });
 
-  const formik = useFormik({
-    initialValues: {
-      username: '',
-      password: '',
-      confirmPassword: '',
-    },
-    validationSchema: yupValidationSchema,
-    onSubmit: async (values) => {
-      try {
-        const response = await axios.post('/api/v1/signup', { username: values.username, password: values.password });
+  const handleChangeUsername = (e) => {
+    setUsername(e.target.value);
+  };
+  const handleChangePassword = (e) => {
+    setPassword(e.target.value);
+  };
+  const handleChangeConfirmPassword = (e) => {
+    setConfirmPassword(e.target.value);
+  };
+  const handleSubmitForm = async (e) => {
+    e.preventDefault();
+    if (formIsValid) {
+     try {
+        const response = await axios.post('/api/v1/signup', { username: username, password: password });
         console.log(response);
         return (<Navigate to="/login" state={{ from: location }} />)
       } catch (err) {
-        formik.setSubmitting(false);
         throw err;
       }
-    },
-  });
+    }
+  };
+
   return (
     <div className="h-100">
       <div className="h-100" id="chat">
@@ -62,7 +69,7 @@ const RegistrationPage = () => {
                     <div>
                       <img src="/src/assets/avatar_1.jpg" className="rounded-circle" alt="Регистрация"/>
                     </div>
-                    <Form className="w-50" onSubmit={formik.handleSubmit}>
+                    <Form className="w-50" onSubmit={handleSubmitForm}>
                       <h1 className="text-center mb-4">Регистрация</h1>
                       <Form.Group className="form-floating mb-3">
                         <Form.Control
@@ -70,9 +77,9 @@ const RegistrationPage = () => {
                           id="username"
                           autoComplete="username"
                           placeholder="От 3 до 20 символов"
-                          isInvalid={yupValidationSchema}
-                          value={formik.values.username}
-                          onChange={formik.handleChange}
+                          isInvalid
+                          value={username}
+                          onChange={handleChangeUsername}
                           ref={inputRef}
                         />
                         <Form.Label htmlFor="username">Имя пользователя</Form.Label>
@@ -84,10 +91,10 @@ const RegistrationPage = () => {
                           id="password"
                           type="password"
                           placeholder="Не менее 6 символов"
-                          isInvalid={yupValidationSchema}
+                          isInvalid
                           autoComplete="new-password"
-                          value={formik.values.password}
-                          onChange={formik.handleChange}
+                          value={password}
+                          onChange={handleChangePassword}
                         />
                         <Form.Label htmlFor="password">Пароль</Form.Label>
                         <Form.Control.Feedback type="invalid">Не менее 6 символов</Form.Control.Feedback>
@@ -99,9 +106,9 @@ const RegistrationPage = () => {
                           type="password"
                           autoComplete="new-password"
                           placeholder="Пароли должны совпадать"
-                          isInvalid={yupValidationSchema}
-                          value={formik.values.confirmPassword}
-                          onChange={formik.handleChange}
+                          isInvalid
+                          value={confirmPassword}
+                          onChange={handleChangeConfirmPassword}
                         />
                         <Form.Label htmlFor="confirmPassword">Подтвердите пароль</Form.Label>
                         <Form.Control.Feedback type="invalid">Пароли должны совпадать</Form.Control.Feedback>
