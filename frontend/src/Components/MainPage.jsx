@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button } from 'react-bootstrap';
 import { Navigate, useLocation } from 'react-router-dom';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { getChannels, addChannel, editChannel, removeChannel } from '../services/channelsApi.js';
@@ -9,7 +9,6 @@ import { logOutSuccess } from '../Slices/authSlice.jsx';
 import { getMessages, addMessage } from '../services/messagesApi.js';
 import CustomSpinner from './Spinner.jsx';
 import chooseModal from '../modals/index.js';
-import { setMessages } from '../Slices/messagesSlice.jsx';
 
 const renderModal = (modalType, handleAddChannel, hideModal) => {
   if (!modalType.type) {
@@ -24,7 +23,6 @@ const MainPage = () => {
 
   const userId = JSON.parse(localStorage.getItem('token'));
   const currentUser = useSelector((state) => state.authReducer.user);
-  console.log(currentUser);
   const dispatch = useDispatch();
   const handleClickLogOut = () => {
     dispatch(logOutSuccess());
@@ -87,7 +85,7 @@ const MainPage = () => {
     console.log('Showing modal:', type, item);
     setModalType({ type, item })
   };
-
+  
   if (userId) {
     if (isLoadingChannels) {
       return <CustomSpinner />;
@@ -143,8 +141,7 @@ const MainPage = () => {
                           >
                             <span className="visually-hidden">Управление каналом</span>
                           </Button>
-                          <div 
-                            x-placement="bottom-start"
+                          <div
                             className="dropdown-menu"
                             data-popper-reference-hidden='false'
                             data-popper-escaped="false"

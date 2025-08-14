@@ -2,7 +2,6 @@
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
-import { useSelector } from 'react-redux';
 import LoginPage from './Components/LoginPage';
 import Page404 from './Components/Page404';
 import MainPage from './Components/MainPage';

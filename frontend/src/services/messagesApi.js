@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { io } from 'socket.io-client';
 
-const socket = io('https://localhost:3000');
 export const messagesApi = createApi({
   reducerPath: 'messagesApi',
       baseQuery: fetchBaseQuery({
@@ -19,29 +18,25 @@ export const messagesApi = createApi({
           query: () => '',
           async onCacheEntryAdded(
             arg,
-            { updateCachedData, cacheEntryRemoved, dispatch }
+            { updateCachedData, cacheEntryRemoved }
           ) {
-            try {
-             // Подписка на сокет-событие при добавлении entry в кеш
-              const handleMessageReceived = (newMessage) => {
+            const socket = io('http://localhost:5001', { transports: ['websocket'] });
+            const handleMessageReceived = (arg) => {
                 updateCachedData((draft) => {
-                  draft.push(newMessage);
+                  draft.push(arg);
                 });
-              };
-
+            };
+            try {
               socket.on('newMessage', handleMessageReceived);
-              // Обработка ошибок соединения
               socket.on('connect_error', (error) => {
                 console.error('Connection error:', error);
               });
-
-              // Удаление подписчика и обработка ошибок
               await cacheEntryRemoved;
             } catch (error) {
               console.error('Error in onCacheEntryAdded:', error);
             } finally {
               socket.off('newMessage', handleMessageReceived);
-              socket.off('connect_error'); // Убедитесь в удалении слушателя ошибок, если это необходимо
+              socket.off('connect_error');
             }
           },
         }),
@@ -53,7 +48,7 @@ export const messagesApi = createApi({
           }),
         }),
         editMessage: builder.mutation({
-          query: (id, message) => ({
+          query: ({ id, message }) => ({
             url: id,
             method: 'PATCH',
             body: message,
