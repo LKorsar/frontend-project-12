@@ -1,16 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { useLocation, Navigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from "yup";
-import axios, { formToJSON } from "axios";
+import axios from "axios";
 
 const RegistrationPage = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [formIsValid, setFormIsValid] = useState(null);
-
   const location = useLocation();
 
   const inputRef = useRef();
@@ -30,26 +26,16 @@ const RegistrationPage = () => {
       .oneOf([Yup.ref('password'), null], 'Пароли должны совпадать'),
   });
 
-  const handleChangeUsername = (e) => {
-    setUsername(e.target.value);
-  };
-  const handleChangePassword = (e) => {
-    setPassword(e.target.value);
-  };
-  const handleChangeConfirmPassword = (e) => {
-    setConfirmPassword(e.target.value);
-  };
-  const handleSubmitForm = async (e) => {
-    e.preventDefault();
-    if (formIsValid) {
+  const handleSubmitForm = async (values, { setSubmitting }) => {
      try {
-        const response = await axios.post('/api/v1/signup', { username: username, password: password });
+        const response = await axios.post('/api/v1/signup', { username: values.username, password: values.password });
         console.log(response);
         return (<Navigate to="/login" state={{ from: location }} />)
       } catch (err) {
+        setSubmitting(false);
+        inputRef.current.select();
         throw err;
       }
-    }
   };
 
   return (
@@ -69,52 +55,77 @@ const RegistrationPage = () => {
                     <div>
                       <img src="/src/assets/avatar_1.jpg" className="rounded-circle" alt="Регистрация"/>
                     </div>
-                    <Form className="w-50" onSubmit={handleSubmitForm}>
-                      <h1 className="text-center mb-4">Регистрация</h1>
-                      <Form.Group className="form-floating mb-3">
-                        <Form.Control
-                          name="username"
-                          id="username"
-                          autoComplete="username"
-                          placeholder="От 3 до 20 символов"
-                          isInvalid
-                          value={username}
-                          onChange={handleChangeUsername}
-                          ref={inputRef}
-                        />
-                        <Form.Label htmlFor="username">Имя пользователя</Form.Label>
-                        <Form.Control.Feedback type="invalid">От 3 до 20 символов</Form.Control.Feedback>
-                      </Form.Group>
-                      <Form.Group>
-                        <Form.Control
-                          name="password"
-                          id="password"
-                          type="password"
-                          placeholder="Не менее 6 символов"
-                          isInvalid
-                          autoComplete="new-password"
-                          value={password}
-                          onChange={handleChangePassword}
-                        />
-                        <Form.Label htmlFor="password">Пароль</Form.Label>
-                        <Form.Control.Feedback type="invalid">Не менее 6 символов</Form.Control.Feedback>
-                      </Form.Group>
-                      <Form.Group>
-                        <Form.Control
-                          name="confirmPassword"
-                          id="confirmPassword"
-                          type="password"
-                          autoComplete="new-password"
-                          placeholder="Пароли должны совпадать"
-                          isInvalid
-                          value={confirmPassword}
-                          onChange={handleChangeConfirmPassword}
-                        />
-                        <Form.Label htmlFor="confirmPassword">Подтвердите пароль</Form.Label>
-                        <Form.Control.Feedback type="invalid">Пароли должны совпадать</Form.Control.Feedback>
-                      </Form.Group>
-                      <Button type="submit" variant="outline-primary" className="w-100 btn">Зарегистрироваться</Button>
-                    </Form>
+                    <Formik
+                      initialValues={{
+                        username: '',
+                        password: '',
+                        confirmPassword: '',
+                      }}
+                      validationSchema={yupValidationSchema}
+                      onSubmit={handleSubmitForm}
+                    >
+                      {({ errors, touched }) => (
+                      <Form className="w-50">
+                        <h1 className="text-center mb-4">Регистрация</h1>
+                        <div className="form-floating mb-3">
+                          <Field
+                            name="username"
+                            id="username"
+                            autoComplete="username"
+                            placeholder="От 3 до 20 символов"
+                            ref={inputRef}
+                            className={`form-control ${
+                              touched.username && errors.username ? "is-invalid" : ""
+                            }`}
+                          />
+                          <label htmlFor="username">Имя пользователя</label>
+                          <ErrorMessage
+                            component="div"
+                            name="username"
+                            className="invalid-feedback invalid-tooltip"
+                            placement="right"
+                          />
+                        </div>
+                        <div className="form-floating mb-3">
+                          <Field
+                            name="password"
+                            type="password"
+                            id="password"
+                            autoComplete="new-password"
+                            placeholder="Не менее 6 символов"
+                            className={`form-control ${
+                              touched.password && errors.password ? "is-invalid" : ""
+                            }`}
+                          />
+                          <label htmlFor="password">Пароль</label>
+                          <ErrorMessage
+                            component="div"
+                            name="password"
+                            className="invalid-feedback invalid-tooltip"
+                          />
+                        </div>
+                        <div className="form-floating mb-3">
+                          <Field
+                            name="confirmPassword"
+                            id="confirmPassword"
+                            type="password"
+                            autoComplete="new-password"
+                            placeholder="Пароли должны совпадать"
+                            className={`form-control ${
+                              touched.confirmPassword && errors.confirmPassword ? "is-invalid" : ""
+                            }`}
+                          />
+                          <label htmlFor="confirmPassword">Подтвердите пароль</label>
+                          <ErrorMessage
+                            component="div"
+                            name="confirmPassword"
+                            className="invalid-feedback invalid-tooltip"
+                          />
+                        </div>
+                        <Button type="submit" variant="outline-primary" className="w-100 btn">Зарегистрироваться</Button>
+                      </Form>
+                      )}
+                    </Formik>
                   </div>
                 </div>
               </div>
