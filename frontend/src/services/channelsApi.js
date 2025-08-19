@@ -24,10 +24,10 @@ export const channelsApi = createApi({
         }),
       }),
       editChannel: builder.mutation({
-        query: (id, channel) => ({
+        query: ({ id, ...body }) => ({
           url: id,
           method: 'PATCH',
-          body: channel,
+          body,
         }),
       }),
       removeChannel: builder.mutation({
@@ -39,10 +39,4 @@ export const channelsApi = createApi({
     }),
 });
 
-const { useGetChannelsQuery, useAddChannelMutation, useEditChannelMutation, useRemoveChannelMutation } = channelsApi;
-export {
-  useGetChannelsQuery as getChannels,
-  useAddChannelMutation as addChannel,
-  useEditChannelMutation as editChannel,
-  useRemoveChannelMutation as removeChannel,
-};
+export const { useGetChannelsQuery, useAddChannelMutation, useEditChannelMutation, useRemoveChannelMutation } = channelsApi;

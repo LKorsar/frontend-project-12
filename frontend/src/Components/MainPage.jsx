@@ -1,21 +1,28 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button } from 'react-bootstrap';
+import { Button, ButtonGroup, Dropdown } from 'react-bootstrap';
 import { Navigate, useLocation } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
-import { getChannels, addChannel, editChannel, removeChannel } from '../services/channelsApi.js';
+import { useGetChannelsQuery, useAddChannelMutation, useEditChannelMutation, useRemoveChannelMutation } from '../services/channelsApi.js';
 import { logOutSuccess } from '../Slices/authSlice.jsx';
 import { getMessages, addMessage } from '../services/messagesApi.js';
+import { setActiveChannel } from '../Slices/channelsSlice.jsx';
 import CustomSpinner from './Spinner.jsx';
 import chooseModal from '../modals/index.js';
 
-const renderModal = (modalType, handleAddChannel, hideModal) => {
+const renderModal = (modalType, handleAddChannel, hideModal, handleRenameChannel, handleDeleteChannel) => {
   if (!modalType.type) {
     return null;
   }
   const Component = chooseModal(modalType.type);
-  return <Component modalType={modalType} handleAddChannel={handleAddChannel} onHide={hideModal} />;
+  return <Component 
+    modalType={modalType}
+    handleAddChannel={handleAddChannel}
+    onHide={hideModal}
+    handleRenameChannel={handleRenameChannel}
+    handleDeleteChannel={handleDeleteChannel}
+  />;
 };
 
 const MainPage = () => {
@@ -29,10 +36,11 @@ const MainPage = () => {
     localStorage.removeItem('token');
   };
 
-  const { data: channels, isLoading: isLoadingChannels, refetch: refetchChannels } = getChannels();
-  const [renameChannel] = editChannel();
-  const [deleteChannel] = removeChannel();
-  const [addNewChannel] = addChannel();
+  const { data: channels, isLoading: isLoadingChannels, refetch: refetchChannels } = useGetChannelsQuery();
+  const [renameChannel] = useEditChannelMutation();
+  const [deleteChannel] = useRemoveChannelMutation();
+  const [addNewChannel] = useAddChannelMutation();
+  console.log(channels);
 
   const handleAddChannel = (newChannel) => {
     addNewChannel({ name: newChannel });
@@ -43,7 +51,7 @@ const MainPage = () => {
     refetchChannels();
   };
   const handleRenameChannel = (id, newName) => {
-    renameChannel(id, { name: newName } );
+    renameChannel({ id: id, name: newName });
     refetchChannels();
   };
 
@@ -56,12 +64,7 @@ const MainPage = () => {
     { disabled: newMessage === '' ? true : false },
   );
 
-  const [activeChannel, setActiveChannel] = useState({ name: 'general', id: 1 });
-  useEffect(() => {
-    if (channels && channels.length > 0 && channels[0].id !== activeChannel.id) {
-      setActiveChannel(channels[0]);
-  }
-  }, [channels]);
+  const activeChannel = useSelector((state) => state.channelsReducer.activeChannel);
   
   const [messagesCount, setMessagesCount] = useState(0);
   useEffect(() => {
@@ -82,7 +85,6 @@ const MainPage = () => {
   const [modalType, setModalType] = useState({ type: null, item: null });
   const hideModal = () => setModalType({ type: null, item: null });
   const showModal = (type, item = 0) => {
-    console.log('Showing modal:', type, item);
     setModalType({ type, item })
   };
   
@@ -126,35 +128,34 @@ const MainPage = () => {
                         'w-100', 'rounded-0', 'text-start', 'btn',
                         channel.id === activeChannel.id ? 'btn-secondary' : 'btn-light',
                       );
+                      if (channel.removable === false) {
+                        return (
+                          <li key={channel.id} className="nav-item w-100">
+                            <Button
+                              type="button" className={channelBtnclass} onClick={() => dispatch(setActiveChannel(channel))}>
+                              <span className="me-1">#</span>
+                              {channel.name}
+                            </Button>
+                          </li>    
+                        );
+                      }
                       return (
-                      <li key={channel.id} className="nav-item w-100">
-                        <div role="group" className="d-flex dropdown btn-group">
-                          <Button type="button" className={channelBtnclass} onClick={() => setActiveChannel(channel)}>
-                            <span className="me-1">#</span>
-                            {channel.name}
-                          </Button>
-                          <Button 
-                            type="button"
-                            aria-expanded="false"
-                            className="flex-grow-0 dropdown-toggle dropdown-toggle-split btn btn-secondary"
-                            id={channel.id}
-                          >
-                            <span className="visually-hidden">Управление каналом</span>
-                          </Button>
-                          <div
-                            className="dropdown-menu"
-                            data-popper-reference-hidden='false'
-                            data-popper-escaped="false"
-                            data-popper-placement="bottom-start"
-                            aria-labelledby={channel.id}
-                            style={ { position: "absolute", inset: "0px auto auto 0px", transform: "translate3d(-8px, 40px, 0px)" } }
-                          >
-                            <a data-rr-ui-dropdown-item role="button" className="dropdown-item" tabIndex="0" href="#">Удалить</a>
-                            <a data-rr-ui-dropdown-item role="button" className="dropdown-item" tabIndex="0" href="#">Переименовать</a>
-                          </div>
-                        </div>
-                      </li>);
-                    })}
+                        <li key={channel.id} className="nav-item w-100">
+                          <Dropdown as={ButtonGroup}>
+                            <Button type="button" className={channelBtnclass} onClick={() => dispatch(setActiveChannel(channel))}>
+                              <span className="me-1">#</span>
+                              {channel.name}
+                            </Button>
+                            <Dropdown.Toggle split className={channelBtnclass} />
+                            <Dropdown.Menu>
+                              <Dropdown.Item href="#" onClick={() => showModal('removing', channel.id)}>Удалить</Dropdown.Item>
+                              <Dropdown.Item href="#" onClick={() => showModal('renaming', channel.id)}>Переименовать</Dropdown.Item>
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </li>
+                      );
+                    })
+                  }
                   </ul>
                 </div>
                 <div className="col p-0 h-100">
@@ -212,7 +213,7 @@ const MainPage = () => {
         </div>
       </div>
       <div>
-        {modalType && renderModal(modalType, handleAddChannel, hideModal)}
+        {modalType && renderModal(modalType, handleAddChannel, hideModal, handleRenameChannel, handleDeleteChannel)}
       </div>
       </>
     );
