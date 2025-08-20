@@ -40,3 +40,4 @@ export const channelsApi = createApi({
 });
 
 export const { useGetChannelsQuery, useAddChannelMutation, useEditChannelMutation, useRemoveChannelMutation } = channelsApi;
+export const { removeChannel } = channelsApi.util;

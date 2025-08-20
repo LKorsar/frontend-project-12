@@ -40,7 +40,6 @@ const MainPage = () => {
   const [renameChannel] = useEditChannelMutation();
   const [deleteChannel] = useRemoveChannelMutation();
   const [addNewChannel] = useAddChannelMutation();
-  console.log(channels);
 
   const handleAddChannel = (newChannel) => {
     addNewChannel({ name: newChannel });
@@ -58,6 +57,7 @@ const MainPage = () => {
   const { data: messages, refetch: refetchMessages } = getMessages();
   const [addNewMessage] = addMessage();
   const [newMessage, setNewMessage] = useState('');
+  console.log(messages);
 
   const messageBtnClass = classNames(
     'btn', 'btn-group-vertical', 'btn-light',

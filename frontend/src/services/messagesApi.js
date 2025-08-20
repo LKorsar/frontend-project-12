@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { io } from 'socket.io-client';
+import { removeChannel } from './channelsApi';
 
 export const messagesApi = createApi({
   reducerPath: 'messagesApi',
@@ -61,6 +62,15 @@ export const messagesApi = createApi({
           }),
         }),
       }),
+      extraReducers: (builder) => {
+        builder.addCase(removeChannel, (state, action) => {
+          const channelId = action.payload;
+          return {
+            ...state,
+            messages: state.messages.filter((mes) => mes.channelId !== channelId)
+          };
+        });
+      },
 });
 
 const { useGetMessagesQuery, useAddMessageMutation, useEditMessageMutation, useRemoveMessageMutation } = messagesApi;
