@@ -1,5 +1,4 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { io } from 'socket.io-client';
 import { removeChannel } from './channelsApi';
 
 export const messagesApi = createApi({
@@ -17,29 +16,6 @@ export const messagesApi = createApi({
       endpoints: (builder) => ({
         getMessages: builder.query({
           query: () => '',
-          async onCacheEntryAdded(
-            arg,
-            { updateCachedData, cacheEntryRemoved }
-          ) {
-            const socket = io('http://localhost:5001', { transports: ['websocket'] });
-            const handleMessageReceived = (arg) => {
-                updateCachedData((draft) => {
-                  draft.push(arg);
-                });
-            };
-            try {
-              socket.on('newMessage', handleMessageReceived);
-              socket.on('connect_error', (error) => {
-                console.error('Connection error:', error);
-              });
-              await cacheEntryRemoved;
-            } catch (error) {
-              console.error('Error in onCacheEntryAdded:', error);
-            } finally {
-              socket.off('newMessage', handleMessageReceived);
-              socket.off('connect_error');
-            }
-          },
         }),
         addMessage: builder.mutation({
           query: message => ({
@@ -65,9 +41,12 @@ export const messagesApi = createApi({
       extraReducers: (builder) => {
         builder.addCase(removeChannel, (state, action) => {
           const channelId = action.payload;
+           console.log('Before removal', state.messages);
+           const updatedMessages = state.messages.filter((mes) => mes.channelId !== channelId);
+           console.log('After removal', updatedMessages);
           return {
             ...state,
-            messages: state.messages.filter((mes) => mes.channelId !== channelId)
+            messages: updatedMessages,
           };
         });
       },

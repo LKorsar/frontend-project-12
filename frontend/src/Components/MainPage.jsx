@@ -65,6 +65,7 @@ const MainPage = () => {
   );
 
   const activeChannel = useSelector((state) => state.channelsReducer.activeChannel);
+  console.log(activeChannel);
   
   const [messagesCount, setMessagesCount] = useState(0);
   useEffect(() => {
