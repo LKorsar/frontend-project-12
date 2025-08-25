@@ -59,7 +59,6 @@ const MainPage = () => {
   const { data: messages, refetch: refetchMessages } = getMessages();
   const [addNewMessage] = addMessage();
   const [newMessage, setNewMessage] = useState('');
-  console.log(messages);
 
   const messageBtnClass = classNames(
     'btn', 'btn-group-vertical', 'btn-light',
@@ -68,10 +67,11 @@ const MainPage = () => {
 
   const activeChannel = useSelector((state) => state.channelsReducer.activeChannel);
   useEffect(() => {
-    if (!activeChannel) {
-      dispatch(setActiveChannel({ name: 'general', id: 1 }));
-    }
-    dispatch(setActiveChannel(channels[channels.length - 1]));
+    dispatch(setActiveChannel({ name: 'general', id: 1 }));
+  }, []);
+
+  useEffect(() => {
+    console.log(messages);
   }, [channels]);
   
   const [messagesCount, setMessagesCount] = useState(0);
