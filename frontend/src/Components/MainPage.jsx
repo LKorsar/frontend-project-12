@@ -49,7 +49,6 @@ const MainPage = () => {
     deleteChannel(id);
     dispatch(removeChannel(id));
     refetchChannels();
-    console.log('deleting');
   };
   const handleRenameChannel = (id, newName) => {
     renameChannel({ id: id, name: newName });
@@ -67,12 +66,14 @@ const MainPage = () => {
 
   const activeChannel = useSelector((state) => state.channelsReducer.activeChannel);
   useEffect(() => {
-    dispatch(setActiveChannel({ name: 'general', id: 1 }));
+    if (!activeChannel) {
+      dispatch(setActiveChannel({ name: 'general', id: 1 }));
+    }
   }, []);
 
   useEffect(() => {
     console.log(messages);
-  }, [channels]);
+  }, [channels, messages]);
   
   const [messagesCount, setMessagesCount] = useState(0);
   useEffect(() => {

@@ -1,11 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { Modal, Button } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import { useGetChannelsQuery } from '../services/channelsApi.js';
+import { setActiveChannel } from '../Slices/channelsSlice.js';
 
 const ModalAddChannel = ({ onHide, handleAddChannel }) => {
-  const { data: channels } = useGetChannelsQuery();
+  const dispatch = useDispatch();
+  const { data: channels, refetch: refetchChannels } = useGetChannelsQuery();
   const channelsNames = channels.map((ch) => ch.name);
   const schema = Yup.object().shape({
     channel: Yup.string()
@@ -15,9 +18,14 @@ const ModalAddChannel = ({ onHide, handleAddChannel }) => {
       .notOneOf(channelsNames, 'Должно быть уникальным'),
   });
 
-  const handleSubmitForm = (values, { setSubmitting }) => {
+  const handleSubmitForm = async (values, { setSubmitting }) => {
     try {
-      handleAddChannel(values.channel)
+      await handleAddChannel(values.channel);
+      refetchChannels();
+      if (channels && channels.length > 0) {
+      dispatch(setActiveChannel(channels[channels.length - 1]));
+      onHide();
+      }
       onHide();
     } catch (err) {
       setSubmitting(false);
