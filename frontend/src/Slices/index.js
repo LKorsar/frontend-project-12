@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
-import authReducer from './authSlice.jsx';
-import messagesReducer from './messagesSlice.jsx';
-import channelsReducer from './channelsSlice.jsx';
+import authReducer from './authSlice.js';
+import messagesReducer from './messagesSlice.js';
+import channelsReducer from './channelsSlice.js';
 import { channelsApi } from '../services/channelsApi.js';
 import { messagesApi } from '../services/messagesApi.js';
 

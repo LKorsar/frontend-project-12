@@ -5,9 +5,9 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { useGetChannelsQuery, useAddChannelMutation, useEditChannelMutation, useRemoveChannelMutation } from '../services/channelsApi.js';
-import { logOutSuccess } from '../Slices/authSlice.jsx';
+import { logOutSuccess } from '../Slices/authSlice.js';
 import { getMessages, addMessage } from '../services/messagesApi.js';
-import { setActiveChannel } from '../Slices/channelsSlice.jsx';
+import { setActiveChannel, removeChannel } from '../Slices/channelsSlice.js';
 import CustomSpinner from './Spinner.jsx';
 import chooseModal from '../modals/index.js';
 
@@ -37,7 +37,7 @@ const MainPage = () => {
   };
 
   const { data: channels, isLoading: isLoadingChannels, refetch: refetchChannels } = useGetChannelsQuery();
-  const [renameChannel] = useEditChannelMutation();
+  const [renameChannel] = useEditChannelMutation(); 
   const [deleteChannel] = useRemoveChannelMutation();
   const [addNewChannel] = useAddChannelMutation();
 
@@ -47,7 +47,9 @@ const MainPage = () => {
   };
   const handleDeleteChannel = (id) => {
     deleteChannel(id);
+    dispatch(removeChannel(id));
     refetchChannels();
+    console.log('deleting');
   };
   const handleRenameChannel = (id, newName) => {
     renameChannel({ id: id, name: newName });
@@ -65,7 +67,12 @@ const MainPage = () => {
   );
 
   const activeChannel = useSelector((state) => state.channelsReducer.activeChannel);
-  console.log(activeChannel);
+  useEffect(() => {
+    if (!activeChannel) {
+      dispatch(setActiveChannel({ name: 'general', id: 1 }));
+    }
+    dispatch(setActiveChannel(channels[channels.length - 1]));
+  }, [channels]);
   
   const [messagesCount, setMessagesCount] = useState(0);
   useEffect(() => {

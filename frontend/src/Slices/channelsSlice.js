@@ -13,9 +13,13 @@ const channelsSlice = createSlice({
     },
     setActiveChannel: (state, action) => {
       state.activeChannel = action.payload;
-    }
+    },
+    removeChannel: (state, action) => {
+      const channelId = action.payload;
+      state.channels = state.channels.filter((ch) => ch.id !== channelId);
+    },
   },
 });
 
-export const { setChannels, setActiveChannel } = channelsSlice.actions;
+export const { setChannels, setActiveChannel, removeChannel } = channelsSlice.actions;
 export default channelsSlice.reducer;

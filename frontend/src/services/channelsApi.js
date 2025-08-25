@@ -12,6 +12,7 @@ export const channelsApi = createApi({
         return headers;
       },
     }),
+    tagTypes: ['Channel'],
     endpoints: (builder) => ({
       getChannels: builder.query({
         query: () => '',
@@ -69,9 +70,9 @@ export const channelsApi = createApi({
           /* dispatch(channelCreated('Канал не удален')) */
         }
       },
+      invalidatesTags: ['Channel'],
       }),
     }),
 });
 
 export const { useGetChannelsQuery, useAddChannelMutation, useEditChannelMutation, useRemoveChannelMutation } = channelsApi;
-export const { removeChannel } = channelsApi.util;

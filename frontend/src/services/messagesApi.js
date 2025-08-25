@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { removeChannel } from './channelsApi';
+import { removeChannel } from '../Slices/channelsSlice';
 
 export const messagesApi = createApi({
   reducerPath: 'messagesApi',
@@ -13,9 +13,11 @@ export const messagesApi = createApi({
           return headers;
         },
       }),
+      tagTypes: ['Channel'],
       endpoints: (builder) => ({
         getMessages: builder.query({
           query: () => '',
+          providesTags: ['Channel'],
         }),
         addMessage: builder.mutation({
           query: message => ({
