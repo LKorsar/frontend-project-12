@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { Modal, Button } from 'react-bootstrap';
 import * as Yup from 'yup';
+import PropTypes from 'prop-types';
 import { useGetChannelsQuery } from '../services/channelsApi.js';
 
 const ModalAddChannel = ({ onHide, handleAddChannel }) => {
@@ -72,6 +73,11 @@ const ModalAddChannel = ({ onHide, handleAddChannel }) => {
       </Modal.Body>
     </Modal>
   );
+};
+
+ModalAddChannel.propTypes = {
+  onHide: PropTypes.func,
+  handleAddChannel: PropTypes.func,
 };
 
 export default ModalAddChannel;

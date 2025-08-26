@@ -68,10 +68,6 @@ const MainPage = () => {
   );
 
   const activeChannel = useSelector((state) => state.channelsReducer.activeChannel);
-  
-  useEffect(() => {
-    console.log(`Active channel: ${activeChannel.name}`);
-  }, [activeChannel]);
 
   useEffect(() => {
     console.log(messages);

@@ -32,6 +32,7 @@ export const channelsApi = createApi({
           console.log('Канал создан');
         } catch (err) {
           /* dispatch(channelCreated('Канал не создан')) */
+          throw err;
         }
       },
       }),
@@ -50,6 +51,7 @@ export const channelsApi = createApi({
         } catch (err) {
           /* dispatch(channelCreated('Канал не изменен')) */
           console.log('Канал не изменен');
+          throw err;
         }
       },
       }),
@@ -65,6 +67,7 @@ export const channelsApi = createApi({
           console.log('Канал удален');
         } catch (err) {
           /* dispatch(channelCreated('Канал не удален')) */
+          throw err;
         }
       },
       invalidatesTags: (result, error, { id }) => [

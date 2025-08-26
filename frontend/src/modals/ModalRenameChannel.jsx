@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { Modal, Button } from 'react-bootstrap';
 import * as Yup from 'yup';
+import PropTypes from 'prop-types';
 import { useGetChannelsQuery } from '../services/channelsApi';
 
 const ModalRenameChannel = ({ modalType, onHide, handleRenameChannel }) => {
@@ -74,6 +75,12 @@ const ModalRenameChannel = ({ modalType, onHide, handleRenameChannel }) => {
         </Modal.Body>
       </Modal>
     );
+};
+
+ModalRenameChannel.propTypes = {
+  modalType: PropTypes.object,
+  onHide: PropTypes.func,
+  handleRenameChannel: PropTypes.func,
 };
 
 export default ModalRenameChannel;
