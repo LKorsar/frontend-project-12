@@ -13,11 +13,12 @@ export const messagesApi = createApi({
           return headers;
         },
       }),
-      tagTypes: ['Channel'],
+      tagTypes: ['Messages', 'Channel'],
       endpoints: (builder) => ({
         getMessages: builder.query({
           query: () => '',
-          providesTags: ['Channel'],
+          providesTags: (result) =>
+            result ? result.map(({ channelId }) => ({ type: 'Messages', id: channelId })) : ['Messages'],
         }),
         addMessage: builder.mutation({
           query: message => ({

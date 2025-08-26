@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { setActiveChannel } from '../Slices/channelsSlice';
 
 export const channelsApi = createApi({
     reducerPath: 'channelsApi',
@@ -13,7 +14,7 @@ export const channelsApi = createApi({
       },
     }),
     tagTypes: ['Channel'],
-    endpoints: (builder) => ({
+    endpoints: (builder) => ({ 
       getChannels: builder.query({
         query: () => '',
       }),
@@ -26,11 +27,10 @@ export const channelsApi = createApi({
         async onQueryStarted(id, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
-          // `onSuccess` side-effect
           /* dispatch(channelCreated('Канал создан')) */
+          dispatch(setActiveChannel(data));
           console.log('Канал создан');
         } catch (err) {
-          // `onError` side-effect
           /* dispatch(channelCreated('Канал не создан')) */
         }
       },
@@ -44,11 +44,10 @@ export const channelsApi = createApi({
         async onQueryStarted(id, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
-          // `onSuccess` side-effect
          /* dispatch(channelCreated('Канал изменен')) */
+         dispatch(setActiveChannel(data));
          console.log('Канал переименован');
         } catch (err) {
-          // `onError` side-effect
           /* dispatch(channelCreated('Канал не изменен')) */
           console.log('Канал не изменен');
         }
@@ -62,15 +61,16 @@ export const channelsApi = createApi({
         async onQueryStarted(id, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
-          // `onSuccess` side-effect
           /* dispatch(channelCreated('Канал удален')) */
           console.log('Канал удален');
         } catch (err) {
-          // `onError` side-effect
           /* dispatch(channelCreated('Канал не удален')) */
         }
       },
-      invalidatesTags: ['Channel'],
+      invalidatesTags: (result, error, id) => [
+        { type: 'Channel', id },
+        { type: 'Messages', id }
+      ],
       }),
     }),
 });

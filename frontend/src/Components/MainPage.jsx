@@ -44,6 +44,9 @@ const MainPage = () => {
   const handleAddChannel = (newChannel) => {
     addNewChannel({ name: newChannel });
     refetchChannels();
+    if (!isLoadingChannels) {
+      console.log(channels);
+    }
   };
   const handleDeleteChannel = (id) => {
     deleteChannel(id);
@@ -65,11 +68,10 @@ const MainPage = () => {
   );
 
   const activeChannel = useSelector((state) => state.channelsReducer.activeChannel);
+  
   useEffect(() => {
-    if (!activeChannel) {
-      dispatch(setActiveChannel({ name: 'general', id: 1 }));
-    }
-  }, []);
+    console.log(`Active channel: ${activeChannel.name}`);
+  }, [activeChannel]);
 
   useEffect(() => {
     console.log(messages);
