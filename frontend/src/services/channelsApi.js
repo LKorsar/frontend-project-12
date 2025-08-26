@@ -67,7 +67,7 @@ export const channelsApi = createApi({
           /* dispatch(channelCreated('Канал не удален')) */
         }
       },
-      invalidatesTags: (result, error, id) => [
+      invalidatesTags: (result, error, { id }) => [
         { type: 'Channel', id },
         { type: 'Messages', id }
       ],

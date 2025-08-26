@@ -1,18 +1,23 @@
 import React, { useEffect, useRef } from "react";
-import { useLocation, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button } from 'react-bootstrap';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from "yup";
 import axios from "axios";
+import { logInSuccess } from "../Slices/authSlice";
 
 const RegistrationPage = () => {
-  const location = useLocation();
+  const navigate = useNavigate()
 
   const inputRef = useRef();
   useEffect(() => {
     inputRef.current.focus();
   }, []);
+
+  const dispatch = useDispatch();
+  const logIn = (user) => dispatch(logInSuccess({ username: user }));
 
   const yupValidationSchema = Yup.object().shape({
     username: Yup.string()
@@ -23,15 +28,23 @@ const RegistrationPage = () => {
       .required('Обязательное поле')
       .min(6, 'Не менее 6 символов'),
     confirmPassword: Yup.string()
+      .required('Обязательное поле')
       .oneOf([Yup.ref('password'), null], 'Пароли должны совпадать'),
   });
 
-  const handleSubmitForm = async (values, { setSubmitting }) => {
+  const handleSubmitForm = async (values, { setFieldError, setSubmitting }) => {
      try {
         const response = await axios.post('/api/v1/signup', { username: values.username, password: values.password });
-        console.log(response);
-        return (<Navigate to="/login" state={{ from: location }} />)
+        localStorage.setItem('token', JSON.stringify(response.data));
+        logIn(values.username);
+        navigate('/');
       } catch (err) {
+        if (err.isAxiosError && err.response.status === 409) {
+          setFieldError('confirmPassword', 'Такой пользователь уже существует');
+          setSubmitting(false);
+          inputRef.current.select();
+          throw err;
+        }
         setSubmitting(false);
         inputRef.current.select();
         throw err;

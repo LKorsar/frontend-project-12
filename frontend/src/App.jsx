@@ -10,7 +10,7 @@ import RegistrationPage from './Components/RegistrationPage';
   const PrivateRoot = ({ children }) => {
   const location = useLocation();
   const userId = JSON.parse(localStorage.getItem('token'));
-  
+  console.log(userId);
   return (
     userId ? children : <Navigate to="/login" state={{ from: location }} />
   );
