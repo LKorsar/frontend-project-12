@@ -4,6 +4,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 import { useGetChannelsQuery, useAddChannelMutation, useEditChannelMutation, useRemoveChannelMutation } from '../services/channelsApi.js';
 import { logOutSuccess } from '../Slices/authSlice.js';
 import { getMessages, addMessage } from '../services/messagesApi.js';
@@ -35,6 +36,8 @@ const MainPage = () => {
     dispatch(logOutSuccess());
     localStorage.removeItem('token');
   };
+
+  const { t } = useTranslation();
 
   const { data: channels, isLoading: isLoadingChannels, refetch: refetchChannels } = useGetChannelsQuery();
   const [renameChannel] = useEditChannelMutation(); 
@@ -107,14 +110,14 @@ const MainPage = () => {
             <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
               <div className="container">
                 <a className="navbar-brand" href="/">Hexlet Chat</a>
-                <Button className="btn btn-primary" type="button" onClick={handleClickLogOut}>Выйти</Button>
+                <Button className="btn btn-primary" type="button" onClick={handleClickLogOut}>{t('logoutBtn')}</Button>
               </div>
             </nav>
             <div className="container h-100 my-4 overflow-hidden rounded shadow">
               <div className="row h-100 flex-md-row bg-white">
                 <div className="col col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
                   <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
-                    <b>Каналы</b>
+                    <b>{t('channels.channels')}</b>
                     <Button type="button" className="p-0 text-primary btn btn-light btn-group-vertical" onClick={() => showModal('adding')}>
                       <svg 
                         xmlns="http://www.w3.org/2000/svg"
@@ -155,8 +158,8 @@ const MainPage = () => {
                             </Button>
                             <Dropdown.Toggle split className={channelBtnclass} />
                             <Dropdown.Menu>
-                              <Dropdown.Item href="#" onClick={() => showModal('removing', channel.id)}>Удалить</Dropdown.Item>
-                              <Dropdown.Item href="#" onClick={() => showModal('renaming', channel.id)}>Переименовать</Dropdown.Item>
+                              <Dropdown.Item href="#" onClick={() => showModal('removing', channel.id)}>{t('channels.removeBtn')}</Dropdown.Item>
+                              <Dropdown.Item href="#" onClick={() => showModal('renaming', channel.id)}>{t('channels.editBtn')}</Dropdown.Item>
                             </Dropdown.Menu>
                           </Dropdown>
                         </li>
@@ -187,7 +190,7 @@ const MainPage = () => {
                           <input
                             name="body"
                             aria-label="Новое сообщение"
-                            placeholder="Введите сообщение..."
+                            placeholder={t('messages.input')}
                             className="border-0 p-0 ps-2 form-control"
                             value={newMessage}
                             onChange={(event) => setNewMessage(event.target.value)}

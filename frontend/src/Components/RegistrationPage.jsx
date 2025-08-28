@@ -6,6 +6,7 @@ import { Button } from 'react-bootstrap';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from "yup";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 import { logInSuccess } from "../Slices/authSlice";
 
 const RegistrationPage = () => {
@@ -18,6 +19,8 @@ const RegistrationPage = () => {
 
   const dispatch = useDispatch();
   const logIn = (user) => dispatch(logInSuccess({ username: user }));
+
+  const { t } = useTranslation();
 
   const yupValidationSchema = Yup.object().shape({
     username: Yup.string()
@@ -79,7 +82,7 @@ const RegistrationPage = () => {
                     >
                       {({ errors, touched }) => (
                       <Form className="w-50">
-                        <h1 className="text-center mb-4">Регистрация</h1>
+                        <h1 className="text-center mb-4">{t('signupForm.header')}</h1>
                         <div className="form-floating mb-3">
                           <Field
                             name="username"
@@ -91,7 +94,7 @@ const RegistrationPage = () => {
                               touched.username && errors.username ? "is-invalid" : ""
                             }`}
                           />
-                          <label htmlFor="username">Имя пользователя</label>
+                          <label htmlFor="username">{t('signupForm.usernameInput')}</label>
                           <ErrorMessage
                             component="div"
                             name="username"
@@ -110,7 +113,7 @@ const RegistrationPage = () => {
                               touched.password && errors.password ? "is-invalid" : ""
                             }`}
                           />
-                          <label htmlFor="password">Пароль</label>
+                          <label htmlFor="password">{t('signupForm.passwordInput')}</label>
                           <ErrorMessage
                             component="div"
                             name="password"
@@ -128,14 +131,14 @@ const RegistrationPage = () => {
                               touched.confirmPassword && errors.confirmPassword ? "is-invalid" : ""
                             }`}
                           />
-                          <label htmlFor="confirmPassword">Подтвердите пароль</label>
+                          <label htmlFor="confirmPassword">{t('signupForm.confirmPassInput')}</label>
                           <ErrorMessage
                             component="div"
                             name="confirmPassword"
                             className="invalid-feedback invalid-tooltip"
                           />
                         </div>
-                        <Button type="submit" variant="outline-primary" className="w-100 btn">Зарегистрироваться</Button>
+                        <Button type="submit" variant="outline-primary" className="w-100 btn">{t('signupForm.submitBtn')}</Button>
                       </Form>
                       )}
                     </Formik>

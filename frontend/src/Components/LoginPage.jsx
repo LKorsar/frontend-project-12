@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form, Button } from 'react-bootstrap';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
+import { useTranslation } from "react-i18next";
 import { logInSuccess, logOutSuccess } from '../Slices/authSlice.js';
 
 const LoginPage = () => {
@@ -21,6 +22,8 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const [authFailed, setAuthFailed] = useState(null);
+
+  const { t } = useTranslation();
 
   const formik = useFormik({
     initialValues: {
@@ -65,7 +68,7 @@ const LoginPage = () => {
                       <img src="/src/assets/avatar.jpg" className="rounded-circle" alt="Войти" />
                     </div>
                     <Form className="col-12 col-md-6 mt-3 mt-md-0" onSubmit={formik.handleSubmit}>
-                      <h1 className="text-center mb-4">Войти</h1>
+                      <h1 className="text-center mb-4">{t('loginForm.header')}</h1>
                       <Form.Group className="form-floating mb-3">
                         <Form.Control
                           name="username"
@@ -78,7 +81,7 @@ const LoginPage = () => {
                           onChange={formik.handleChange}
                           ref={inputRef}
                         ></Form.Control>
-                        <Form.Label htmlFor="username">Ваш ник</Form.Label>
+                        <Form.Label htmlFor="username">{t('loginForm.usernameInput')}</Form.Label>
                       </Form.Group>
                       <Form.Group className="form-floating mb-4">
                         <Form.Control
@@ -92,16 +95,16 @@ const LoginPage = () => {
                           isInvalid={authFailed}
                           onChange={formik.handleChange}
                         ></Form.Control>
-                        <Form.Label htmlFor="password">Пароль</Form.Label>
-                        <Form.Control.Feedback type="invalid">Неверные имя пользователя или пароль</Form.Control.Feedback>
+                        <Form.Label htmlFor="password">{t('loginForm.passwordInput')}</Form.Label>
+                        <Form.Control.Feedback type="invalid">{t('loginForm.errors.authErr')}</Form.Control.Feedback>
                       </Form.Group>
-                      <Button type="submit" className="w-100 mb-3 btn" variant="outline-primary">Войти</Button>
+                      <Button type="submit" className="w-100 mb-3 btn" variant="outline-primary">{t('loginForm.submitBtn')}</Button>
                     </Form>
                   </div>
                   <div className="card-footer p-4">
                     <div className="text-center">
-                      <span>Нет аккаунта? </span>
-                      <a href="/signup">Регистрация</a>
+                      <span>{t('loginForm.noAccount')}</span>
+                      <a href="/signup">{t('loginForm.registration')}</a>
                     </div>
                   </div>
                 </div>
