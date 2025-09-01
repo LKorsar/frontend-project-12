@@ -36,10 +36,11 @@ export default {
       remove: {
         header: 'Удалить канал',
         question: 'Уверены?',
+        submitBtn: 'Удалить',
       },
       chName: 'Имя канала',
       cancelBtn: 'Отменить',
-      submitBtn: 'Удалить',
+      submitBtn: 'Отправить',
     },
     errors: {
       min: 'От 3 до 20 символов',
