@@ -51,5 +51,12 @@ export default {
       regErr: 'Такой пользователь уже существует',
       authErr: 'Неверные имя пользователя или пароль',
     },
+    notifications: {
+      chAdded: 'Канал создан',
+      chEdited: 'Канал изменен',
+      chRemoved: 'Канал удален',
+      loadingErr: 'Ошибка загрузки данных',
+      networkErr: 'Отсутствие сети',
+    },
   },
 };

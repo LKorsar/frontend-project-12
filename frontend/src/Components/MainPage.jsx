@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
+import { ToastContainer, toast } from 'react-toastify';
 import { useGetChannelsQuery, useAddChannelMutation, useEditChannelMutation, useRemoveChannelMutation } from '../services/channelsApi.js';
 import { logOutSuccess } from '../Slices/authSlice.js';
 import { getMessages, addMessage } from '../services/messagesApi.js';
@@ -39,26 +40,47 @@ const MainPage = () => {
 
   const { t } = useTranslation();
 
-  const { data: channels, isLoading: isLoadingChannels, refetch: refetchChannels } = useGetChannelsQuery();
+  const { data: channels, isError: isErrorChannels, isLoading: isLoadingChannels, refetch: refetchChannels } = useGetChannelsQuery();
   const [renameChannel] = useEditChannelMutation(); 
   const [deleteChannel] = useRemoveChannelMutation();
   const [addNewChannel] = useAddChannelMutation();
 
-  const handleAddChannel = (newChannel) => {
-    addNewChannel({ name: newChannel });
-    refetchChannels();
-    if (!isLoadingChannels) {
-      console.log(channels);
+  const handleAddChannel = async (newChannel) => {
+    try {
+      await addNewChannel({ name: newChannel });
+      refetchChannels();
+      toast.success(t('notifications.chAdded'));
+    } catch(err) {
+      if (err.isAxiosError) {
+        toast.error(t('notifications.networkErr'));
+      }
+      toast.error(t('notifications.loadingErr'));
     }
   };
-  const handleDeleteChannel = (id) => {
-    deleteChannel(id);
-    dispatch(removeChannel(id));
-    refetchChannels();
+  const handleDeleteChannel = async (id) => {
+    try {
+      await deleteChannel(id);
+      dispatch(removeChannel(id));
+      refetchChannels();
+      notify(t('notifications.chRemoved'));
+    } catch(err) {
+      if (err.isAxiosError) {
+        toast.error(t('notifications.networkErr'));
+      }
+      toast.error(t('notifications.loadingErr'));
+    }
   };
-  const handleRenameChannel = (id, newName) => {
-    renameChannel({ id: id, name: newName });
-    refetchChannels();
+  const handleRenameChannel = async (id, newName) => {
+    try {
+      await renameChannel({ id: id, name: newName });
+      refetchChannels();
+      toast.success(t('notifications.chEdited'));
+    } catch(err) {
+      if (err.isAxiosError) {
+        toast.error(t('notifications.networkErr'));
+      }
+      toast.error(t('notifications.loadingErr'));
+    }
   };
 
   const { data: messages, refetch: refetchMessages } = getMessages();
@@ -97,10 +119,20 @@ const MainPage = () => {
   const showModal = (type, item = 0) => {
     setModalType({ type, item })
   };
+
+  const notify = (text) => {
+    if (isErrorChannels) {
+      toast.error(text);
+    }
+    toast.success(text);
+  };
   
   if (userId) {
     if (isLoadingChannels) {
       return <CustomSpinner />;
+    }
+    if (isErrorChannels) {
+      notify(t('notifications.loadingErr'));
     }
     return (
       <>
@@ -219,11 +251,11 @@ const MainPage = () => {
               </div>
             </div>
           </div>
-          <div className="Toastify"></div>
+          <ToastContainer />
         </div>
       </div>
       <div>
-        {modalType && renderModal(modalType, handleAddChannel, hideModal, handleRenameChannel, handleDeleteChannel)}
+        {modalType && renderModal(modalType, handleAddChannel, hideModal, handleRenameChannel, handleDeleteChannel, notify)}
       </div>
       </>
     );

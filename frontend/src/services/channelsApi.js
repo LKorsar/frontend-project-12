@@ -27,11 +27,9 @@ export const channelsApi = createApi({
         async onQueryStarted(id, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
-          /* dispatch(channelCreated('Канал создан')) */
           dispatch(setActiveChannel(data));
           console.log('Канал создан');
         } catch (err) {
-          /* dispatch(channelCreated('Канал не создан')) */
           throw err;
         }
       },
@@ -45,11 +43,9 @@ export const channelsApi = createApi({
         async onQueryStarted(id, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
-         /* dispatch(channelCreated('Канал изменен')) */
          dispatch(setActiveChannel(data));
          console.log('Канал переименован');
         } catch (err) {
-          /* dispatch(channelCreated('Канал не изменен')) */
           console.log('Канал не изменен');
           throw err;
         }
@@ -63,10 +59,9 @@ export const channelsApi = createApi({
         async onQueryStarted(id, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
-          /* dispatch(channelCreated('Канал удален')) */
           console.log('Канал удален');
+          console.log(data);
         } catch (err) {
-          /* dispatch(channelCreated('Канал не удален')) */
           throw err;
         }
       },
