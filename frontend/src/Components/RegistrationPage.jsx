@@ -24,15 +24,15 @@ const RegistrationPage = () => {
 
   const yupValidationSchema = Yup.object().shape({
     username: Yup.string()
-      .required('Обязательное поле')
-      .min(3, 'От 3 до 20 символов')
-      .max(20, 'От 3 до 20 символов'),
+      .required()
+      .min(3)
+      .max(20),
     password: Yup.string()
-      .required('Обязательное поле')
+      .required()
       .min(6, 'Не менее 6 символов'),
     confirmPassword: Yup.string()
-      .required('Обязательное поле')
-      .oneOf([Yup.ref('password'), null], 'Пароли должны совпадать'),
+      .required()
+      .oneOf([Yup.ref('password'), null]),
   });
 
   const handleSubmitForm = async (values, { setFieldError, setSubmitting }) => {
@@ -43,7 +43,7 @@ const RegistrationPage = () => {
         navigate('/');
       } catch (err) {
         if (err.isAxiosError && err.response.status === 409) {
-          setFieldError('confirmPassword', 'Такой пользователь уже существует');
+          setFieldError('confirmPassword', t('errors.regErr'));
           setSubmitting(false);
           inputRef.current.select();
           throw err;

@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { messagesApi } from './services/messagesApi';
 import i18next from 'i18next';
 import { initReactI18next, I18nextProvider } from 'react-i18next';
+import * as Yup from 'yup';
 import resources from './locales/index.js';
 import App from './App.jsx';
 
@@ -32,7 +33,20 @@ const init = async (socket) => {
      interpolation: {
        escapeValue: false,
      },
-   });
+   })
+     .then(() => {
+       Yup.setLocale({
+        mixed: {
+          required: () => i18n.t('errors.required'),
+          notOneOf: () => i18n.t('errors.notOneOf'),
+          oneOf: () => i18n.t('errors.oneOf'),
+        },
+        string: {
+          min: ({ min }) => i18n.t('errors.min', { min }),
+          max: ({ max }) => i18n.t('errors.max', { max }),
+        },
+       })
+     });
 
   return (
     <Provider store={store}>

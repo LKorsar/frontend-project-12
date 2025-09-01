@@ -3,10 +3,12 @@ import { Modal, Button } from 'react-bootstrap';
 import { Formik, Form } from 'formik';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import { setActiveChannel } from '../Slices/channelsSlice';
 import { useGetChannelsQuery } from '../services/channelsApi';
 
 const ModalRemoveChannel = ({ modalType, onHide, handleDeleteChannel }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { data: channels } = useGetChannelsQuery();
   const handleSubmitForm = () => {
@@ -17,7 +19,7 @@ const ModalRemoveChannel = ({ modalType, onHide, handleDeleteChannel }) => {
   return (
       <Modal show>
         <Modal.Header closeButton onHide={onHide}>
-          <Modal.Title>Удалить канал</Modal.Title>
+          <Modal.Title>{t('modals.remove.header')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Formik
@@ -25,10 +27,10 @@ const ModalRemoveChannel = ({ modalType, onHide, handleDeleteChannel }) => {
             onSubmit={handleSubmitForm}
           >
             <Form>
-              <p className="lead">Уверены?</p>
+              <p className="lead">{t('modals.remove.question')}</p>
               <div className="d-flex justify-content-end">
-                <Button type="button" className="btn btn-secondary me-2" onClick={onHide}>Отменить</Button>
-                <Button type="button" className="btn btn-danger" onClick={handleSubmitForm}>Удалить</Button>
+                <Button type="button" className="btn btn-secondary me-2" onClick={onHide}>{t('modals.cancelBtn')}</Button>
+                <Button type="button" className="btn btn-danger" onClick={handleSubmitForm}>{t('modals.submitBtn')}</Button>
               </div>
             </Form>
           </Formik>

@@ -174,7 +174,7 @@ const MainPage = () => {
                       <p className="m-0">
                         <b>{`# ${activeChannel.name}`}</b>
                       </p>
-                      <span className="text-muted">{`${messagesCount} сообщений`}</span>
+                      <span className="text-muted">{t('messages.counter.count', { count: messagesCount })}</span>
                     </div>
                     <div id="messages-box" className="chat-messages overflow-auto px-5">
                       {messages && messages.filter((message) => message.channelId === activeChannel.id).map((message) => {

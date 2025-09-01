@@ -3,9 +3,11 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { Modal, Button } from 'react-bootstrap';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import { useGetChannelsQuery } from '../services/channelsApi.js';
 
 const ModalAddChannel = ({ onHide, handleAddChannel }) => {
+  const { t } = useTranslation();
   const { data: channels } = useGetChannelsQuery();
   const channelsNames = channels.map((ch) => ch.name);
   const schema = Yup.object().shape({
@@ -35,7 +37,7 @@ const ModalAddChannel = ({ onHide, handleAddChannel }) => {
   return (
     <Modal show>
       <Modal.Header closeButton onHide={onHide}>
-        <Modal.Title>Добавить канал</Modal.Title>
+        <Modal.Title>{t('modals.headerAdd')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Formik
@@ -59,14 +61,14 @@ const ModalAddChannel = ({ onHide, handleAddChannel }) => {
               } mb-2`}
               ref={inputRef}
             />
-            <label htmlFor="channel" className="visually-hidden">Имя канала</label>
+            <label htmlFor="channel" className="visually-hidden">{t('modals.chName')}</label>
             <ErrorMessage
               component="div"
               name="channel"
               className="invalid-feedback"
             />
-            <Button type="button" className="btn btn-secondary me-2" onClick={onHide}>Отменить</Button>
-            <Button type="submit" className="btn btn-primary">Отправить</Button>
+            <Button type="button" className="btn btn-secondary me-2" onClick={onHide}>{t('modals.cancelBtn')}</Button>
+            <Button type="submit" className="btn btn-primary">{t('modals.submitBtn')}</Button>
           </Form>
           )}
         </Formik>

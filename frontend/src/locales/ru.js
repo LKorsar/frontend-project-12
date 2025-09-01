@@ -8,9 +8,6 @@ export default {
       submitBtn: 'Войти',
       noAccount: 'Нет аккаунта? ',
       registration: 'Регистрация',
-      errors: {
-        authErr: 'Неверные имя пользователя или пароль',
-      },
     },
     signupForm: {
       header: 'Регистрация',
@@ -18,22 +15,6 @@ export default {
       passwordInput: 'Пароль',
       confirmPassInput: 'Подтвердите пароль',
       submitBtn: 'Регистрация',
-      errors: {
-        username: {
-          required: 'Обязательное поле',
-          min: 'От 3 до 20 символов',
-          max: 'От 3 до 20 символов',
-        },
-        password: {
-          required: 'Обязательное поле',
-          min: 'Не менее 6 символов',
-        },
-        confirmPass: {
-          required: 'Обязательное поле',
-          oneOf: 'Пароли должны совпадать',
-        },
-        regErr: 'Такой пользователь уже существует',
-      },
     },
     channels: {
       channels: 'Каналы',
@@ -41,29 +22,33 @@ export default {
       editBtn: 'Переименовать',
     },
     messages: {
-      oneMessage: '{{ count }} сообщение',
-      fewMessages: '{{ count }} сообщения',
-      manyMessages: '{{ count }} сообщений',
+      counter: {
+        count_one: '{{ count }} сообщение',
+        count_few: '{{ count }} сообщения',
+        count_many: '{{ count }} сообщений',
+      },
       input: 'Введите сообщение...',
     },
     logoutBtn: 'Выйти',
     modals: {
-      add: {
-        header: 'Добавить канал',
-        cancelBtn: 'Отменить',
-        submitBtn: 'Отправить',
-      },
-      edit: {
-        header: 'Переименовать канал',
-        cancelBtn: 'Отменить',
-        submitBtn: 'Отправить',
-      },
+      headerAdd: 'Добавить канал',
+      headerEdit: 'Переименовать канал',
       remove: {
         header: 'Удалить канал',
         question: 'Уверены?',
-        cancelBtn: 'Отменить',
-        submitBtn: 'Удалить',
       },
+      chName: 'Имя канала',
+      cancelBtn: 'Отменить',
+      submitBtn: 'Удалить',
+    },
+    errors: {
+      min: 'От 3 до 20 символов',
+      max: 'От 3 до 20 символов',
+      required: 'Обязательное поле',
+      oneOf: 'Пароли должны совпадать',
+      notOneOf: 'Должно быть уникальным',
+      regErr: 'Такой пользователь уже существует',
+      authErr: 'Неверные имя пользователя или пароль',
     },
   },
 };

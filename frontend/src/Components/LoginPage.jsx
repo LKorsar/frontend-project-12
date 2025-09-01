@@ -96,7 +96,7 @@ const LoginPage = () => {
                           onChange={formik.handleChange}
                         ></Form.Control>
                         <Form.Label htmlFor="password">{t('loginForm.passwordInput')}</Form.Label>
-                        <Form.Control.Feedback type="invalid">{t('loginForm.errors.authErr')}</Form.Control.Feedback>
+                        <Form.Control.Feedback type="invalid">{t('errors.authErr')}</Form.Control.Feedback>
                       </Form.Group>
                       <Button type="submit" className="w-100 mb-3 btn" variant="outline-primary">{t('loginForm.submitBtn')}</Button>
                     </Form>
