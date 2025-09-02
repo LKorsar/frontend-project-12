@@ -14,6 +14,7 @@ const ModalAddChannel = ({ onHide, handleAddChannel }) => {
   const channelsNames = channels.map((ch) => ch.name);
   const schema = Yup.object().shape({
     channel: Yup.string()
+      .trim()
       .required()
       .min(3)
       .max(20)

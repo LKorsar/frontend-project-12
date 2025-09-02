@@ -64,10 +64,7 @@ const MainPage = () => {
       refetchChannels();
       toast.success(t('notifications.chRemoved'));
     } catch(err) {
-      if (err.isAxiosError) {
-        toast.error(t('notifications.networkErr'));
-      }
-      toast.error(t('notifications.loadingErr'));
+      toast.error(t('notifications.chNotRemoved'));
     }
   };
   const handleRenameChannel = async (id, newName) => {
@@ -76,10 +73,7 @@ const MainPage = () => {
       refetchChannels();
       toast.success(t('notifications.chEdited'));
     } catch(err) {
-      if (err.isAxiosError) {
-        toast.error(t('notifications.networkErr'));
-      }
-      toast.error(t('notifications.loadingErr'));
+      toast.error(t('notifications.chNotEdited'));
     }
   };
 
@@ -133,7 +127,7 @@ const MainPage = () => {
       return <CustomSpinner />;
     }
     if (isErrorChannels) {
-      notify(t('notifications.loadingErr'));
+      toast.error(t('notifications.loadingErr'));
     }
     return (
       <>

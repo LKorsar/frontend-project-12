@@ -56,10 +56,11 @@ export default {
       chAdded: 'Канал создан',
       chNotAdded: 'Канал не создан',
       chEdited: 'Канал изменен',
+      chNotEdited: 'Канал не изменен',
       chRemoved: 'Канал удален',
+      chNotRemoved: 'Канал не удален',
       loadingErr: 'Ошибка загрузки данных',
       networkErr: 'Отсутствие сети',
-      noBadWords: 'Сообщение не должно содержать ненормативной лексики',
     },
   },
 };

@@ -16,6 +16,7 @@ const ModalRenameChannel = ({ modalType, onHide, handleRenameChannel }) => {
   const curChannelName = currentChannel[0].name;
   const schema = Yup.object().shape({
     channel: Yup.string()
+      .trim()
       .required()
       .min(3)
       .max(20)

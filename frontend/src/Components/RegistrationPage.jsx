@@ -24,13 +24,16 @@ const RegistrationPage = () => {
 
   const yupValidationSchema = Yup.object().shape({
     username: Yup.string()
+      .trim()
       .required()
       .min(3)
       .max(20),
     password: Yup.string()
+      .trim()
       .required()
       .min(6, t('errors.minPass')),
     confirmPassword: Yup.string()
+      .trim()
       .required()
       .oneOf([Yup.ref('password'), null]),
   });
