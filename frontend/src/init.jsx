@@ -5,8 +5,10 @@ import { messagesApi } from './services/messagesApi';
 import i18next from 'i18next';
 import { initReactI18next, I18nextProvider } from 'react-i18next';
 import * as Yup from 'yup';
+import * as leoProfanity from 'leo-profanity';
 import resources from './locales/index.js';
 import App from './App.jsx';
+import FilterContext from './contexts/index.jsx';
 
 const init = async (socket) => {
   const handleNewMessage = (payload) => {
@@ -48,10 +50,22 @@ const init = async (socket) => {
        })
      });
 
+     const FilterProvider = ({ children }) => {
+       leoProfanity.add(leoProfanity.getDictionary('ru'));
+       leoProfanity.add(leoProfanity.getDictionary('en'));
+       return (
+        <FilterContext.Provider value={leoProfanity}>
+          {children}
+        </FilterContext.Provider>
+       );
+     };
+
   return (
     <Provider store={store}>
       <I18nextProvider i18n={i18n}>
-        <App />
+        <FilterProvider>
+          <App />
+        </FilterProvider>
       </I18nextProvider>
     </Provider>
   );

@@ -29,7 +29,7 @@ const RegistrationPage = () => {
       .max(20),
     password: Yup.string()
       .required()
-      .min(6, 'Не менее 6 символов'),
+      .min(6, t('errors.minPass')),
     confirmPassword: Yup.string()
       .required()
       .oneOf([Yup.ref('password'), null]),

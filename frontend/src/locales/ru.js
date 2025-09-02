@@ -44,6 +44,7 @@ export default {
     },
     errors: {
       min: 'От 3 до 20 символов',
+      minPass: 'Не менее 6 символов',
       max: 'От 3 до 20 символов',
       required: 'Обязательное поле',
       oneOf: 'Пароли должны совпадать',
@@ -53,10 +54,12 @@ export default {
     },
     notifications: {
       chAdded: 'Канал создан',
+      chNotAdded: 'Канал не создан',
       chEdited: 'Канал изменен',
       chRemoved: 'Канал удален',
       loadingErr: 'Ошибка загрузки данных',
       networkErr: 'Отсутствие сети',
+      noBadWords: 'Сообщение не должно содержать ненормативной лексики',
     },
   },
 };

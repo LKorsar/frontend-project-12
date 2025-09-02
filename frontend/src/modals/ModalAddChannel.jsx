@@ -1,26 +1,29 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useContext } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { Modal, Button } from 'react-bootstrap';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { useGetChannelsQuery } from '../services/channelsApi.js';
+import FilterContext from '../contexts/index.jsx';
 
 const ModalAddChannel = ({ onHide, handleAddChannel }) => {
   const { t } = useTranslation();
+  const filter = useContext(FilterContext);
   const { data: channels } = useGetChannelsQuery();
   const channelsNames = channels.map((ch) => ch.name);
   const schema = Yup.object().shape({
     channel: Yup.string()
-      .required('Обязательное поле')
-      .min(3, 'От 3 до 20 символов')
-      .max(20, 'От 3 до 20 символов')
-      .notOneOf(channelsNames, 'Должно быть уникальным'),
+      .required()
+      .min(3)
+      .max(20)
+      .notOneOf(channelsNames),
   });
 
   const handleSubmitForm = async (values, { setSubmitting }) => {
     try {
-      await handleAddChannel(values.channel);
+      const filteredValue = filter.clean(values.channel);
+      await handleAddChannel(filteredValue);
       onHide();
     } catch (err) {
       setSubmitting(false);

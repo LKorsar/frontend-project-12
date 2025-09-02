@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, ButtonGroup, Dropdown } from 'react-bootstrap';
 import { Navigate, useLocation } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
@@ -12,6 +12,7 @@ import { getMessages, addMessage } from '../services/messagesApi.js';
 import { setActiveChannel, removeChannel } from '../Slices/channelsSlice.js';
 import CustomSpinner from './Spinner.jsx';
 import chooseModal from '../modals/index.js';
+import FilterContext from '../contexts/index.jsx';
 
 const renderModal = (modalType, handleAddChannel, hideModal, handleRenameChannel, handleDeleteChannel) => {
   if (!modalType.type) {
@@ -40,6 +41,8 @@ const MainPage = () => {
 
   const { t } = useTranslation();
 
+  const filter = useContext(FilterContext);
+
   const { data: channels, isError: isErrorChannels, isLoading: isLoadingChannels, refetch: refetchChannels } = useGetChannelsQuery();
   const [renameChannel] = useEditChannelMutation(); 
   const [deleteChannel] = useRemoveChannelMutation();
@@ -51,10 +54,7 @@ const MainPage = () => {
       refetchChannels();
       toast.success(t('notifications.chAdded'));
     } catch(err) {
-      if (err.isAxiosError) {
-        toast.error(t('notifications.networkErr'));
-      }
-      toast.error(t('notifications.loadingErr'));
+      toast.error(t('notifications.chNotAdded'));
     }
   };
   const handleDeleteChannel = async (id) => {
@@ -62,7 +62,7 @@ const MainPage = () => {
       await deleteChannel(id);
       dispatch(removeChannel(id));
       refetchChannels();
-      notify(t('notifications.chRemoved'));
+      toast.success(t('notifications.chRemoved'));
     } catch(err) {
       if (err.isAxiosError) {
         toast.error(t('notifications.networkErr'));
@@ -108,7 +108,8 @@ const MainPage = () => {
 
   const handleSubmitMessage = (e) => {
     e.preventDefault();
-    const messageToAdd = { body: newMessage, channelId: activeChannel.id, username: currentUser };
+    const filteredMessage = filter.clean(newMessage);
+    const messageToAdd = { body: filteredMessage, channelId: activeChannel.id, username: currentUser };
     addNewMessage(messageToAdd);
     refetchMessages();
     setNewMessage('');

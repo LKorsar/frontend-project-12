@@ -1,28 +1,31 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useContext } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { Modal, Button } from 'react-bootstrap';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { useGetChannelsQuery } from '../services/channelsApi';
+import FilterContext from '../contexts';
 
 const ModalRenameChannel = ({ modalType, onHide, handleRenameChannel }) => {
   const { t } = useTranslation();
+  const filter = useContext(FilterContext);
   const { data: channels } = useGetChannelsQuery();
   const channelsNames = channels.map((ch) => ch.name);
   const currentChannel = channels.filter((ch) => ch.id === modalType.item);
   const curChannelName = currentChannel[0].name;
   const schema = Yup.object().shape({
     channel: Yup.string()
-      .required('Обязательное поле')
-      .min(3, 'От 3 до 20 символов')
-      .max(20, 'От 3 до 20 символов')
-      .notOneOf(channelsNames, 'Должно быть уникальным'),
+      .required()
+      .min(3)
+      .max(20)
+      .notOneOf(channelsNames),
   });
   
   const handleSubmitForm = (values, { setSubmitting }) => {
     try {
-      handleRenameChannel(modalType.item, values.channel);
+      const filteredValue = filter.clean(values.channel);
+      handleRenameChannel(modalType.item, filteredValue);
       onHide();
     } catch (err) {
       setSubmitting(false);
