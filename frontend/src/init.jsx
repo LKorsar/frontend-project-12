@@ -67,7 +67,7 @@ const init = async (socket) => {
   };
 
   function TestError() {
-    const a = null;
+    const a = undefined;
     return a.hello();
   }
 
