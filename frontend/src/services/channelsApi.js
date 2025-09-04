@@ -25,13 +25,9 @@ export const channelsApi = createApi({
           body: channel,
         }),
         async onQueryStarted(id, { dispatch, queryFulfilled }) {
-        try {
           const { data } = await queryFulfilled
           dispatch(setActiveChannel(data));
           console.log('Канал создан');
-        } catch (err) {
-          throw err;
-        }
       },
       }),
       editChannel: builder.mutation({
@@ -56,14 +52,10 @@ export const channelsApi = createApi({
           url: id,
           method: 'DELETE',
         }),
-        async onQueryStarted(id, { dispatch, queryFulfilled }) {
-        try {
+        async onQueryStarted(id, { queryFulfilled }) {
           const { data } = await queryFulfilled
           console.log('Канал удален');
           console.log(data);
-        } catch (err) {
-          throw err;
-        }
       },
       invalidatesTags: (result, error, { id }) => [
         { type: 'Channel', id },

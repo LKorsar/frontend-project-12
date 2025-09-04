@@ -55,6 +55,7 @@ const MainPage = () => {
       toast.success(t('notifications.chAdded'));
     } catch(err) {
       toast.error(t('notifications.chNotAdded'));
+      throw err;
     }
   };
   const handleDeleteChannel = async (id) => {
@@ -65,6 +66,7 @@ const MainPage = () => {
       toast.success(t('notifications.chRemoved'));
     } catch(err) {
       toast.error(t('notifications.chNotRemoved'));
+      throw err;
     }
   };
   const handleRenameChannel = async (id, newName) => {
@@ -74,6 +76,7 @@ const MainPage = () => {
       toast.success(t('notifications.chEdited'));
     } catch(err) {
       toast.error(t('notifications.chNotEdited'));
+      throw err;
     }
   };
 

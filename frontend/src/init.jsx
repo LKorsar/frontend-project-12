@@ -1,12 +1,14 @@
 import store from './Slices/index';
 import React from 'react';
 import { Provider } from 'react-redux';
-import { messagesApi } from './services/messagesApi';
 import i18next from 'i18next';
 import { initReactI18next, I18nextProvider } from 'react-i18next';
 import * as Yup from 'yup';
 import * as leoProfanity from 'leo-profanity';
 import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
+import PropTypes from 'prop-types';
+import { messagesApi } from './services/messagesApi.js';
+import { channelsApi } from './services/channelsApi.js';
 import resources from './locales/index.js';
 import App from './App.jsx';
 import FilterContext from './contexts/index.jsx';
@@ -23,8 +25,50 @@ const init = async (socket) => {
       ),
     );
   };
+
+  const handleNewChannel = (payload) => {
+    store.dispatch(
+      channelsApi.util.updateQueryData(
+        'getChannels',
+        undefined,
+        (draftChannel) => {
+          draftChannel.push(payload);
+        },
+      ),
+    );
+  };
+
+  const handleEditChannel = (payload) => {
+    store.dispatch(
+      channelsApi.util.updateQueryData(
+        'getChannels',
+        undefined,
+        (draftChannel) => {
+          draftChannel.push(payload);
+        },
+      ),
+    );
+  };
+
+  const handleRemoveChannel = (payload) => {
+    store.dispatch(
+      channelsApi.util.updateQueryData(
+        'getChannels',
+        undefined,
+        (draftChannel) => {
+          draftChannel.push(payload);
+        },
+      ),
+    );
+  };
   socket.on('newMessage', handleNewMessage);
+  socket.on('newChannel', handleNewChannel);
+  socket.on('renameChannel', handleEditChannel);
+  socket.on('removeChannel', handleRemoveChannel);
   socket.off('newMessage', handleNewMessage);
+  socket.off('newChannel', handleNewChannel);
+  socket.off('renameChannel', handleEditChannel);
+  socket.off('removeChannel', handleRemoveChannel);
 
   const i18n = i18next.createInstance();
   await i18n
@@ -60,16 +104,14 @@ const init = async (socket) => {
       </FilterContext.Provider>
     );
   };
+  FilterProvider.propTypes = {
+    children: PropTypes.node.isRequired,
+  };
 
   const rollbarConfig = {
     accessToken: 'b338e51dd6474b9da1c78ebec2b3081d',
     environment: 'testenv',
   };
-
-  function TestError() {
-    const a = undefined;
-    return a.hello();
-  }
 
   return (
     <Provider store={store}>
@@ -77,9 +119,7 @@ const init = async (socket) => {
         <I18nextProvider i18n={i18n}>
           <FilterProvider>
             <App />
-            <ErrorBoundary>
-              <TestError />
-            </ErrorBoundary>
+            <ErrorBoundary />
           </FilterProvider>
         </I18nextProvider>
       </RollbarProvider>
