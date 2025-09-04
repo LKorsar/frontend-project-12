@@ -14,12 +14,13 @@ export default {
       usernameInput: 'Имя пользователя',
       passwordInput: 'Пароль',
       confirmPassInput: 'Подтвердите пароль',
-      submitBtn: 'Регистрация',
+      submitBtn: 'Зарегистрироваться',
     },
     channels: {
       channels: 'Каналы',
       removeBtn: 'Удалить',
       editBtn: 'Переименовать',
+      chManagement: 'Управление каналом',
     },
     messages: {
       counter: {
@@ -28,6 +29,7 @@ export default {
         count_many: '{{ count }} сообщений',
       },
       input: 'Введите сообщение...',
+      submitBtn: 'Отправить',
     },
     logoutBtn: 'Выйти',
     modals: {
@@ -55,11 +57,11 @@ export default {
     notifications: {
       chAdded: 'Канал создан',
       chNotAdded: 'Канал не создан',
-      chEdited: 'Канал изменен',
+      chEdited: 'Канал переименован',
       chNotEdited: 'Канал не изменен',
-      chRemoved: 'Канал удален',
+      chRemoved: 'Канал удалён',
       chNotRemoved: 'Канал не удален',
-      loadingErr: 'Ошибка загрузки данных',
+      loadingErr: 'Ошибка соединения',
       networkErr: 'Отсутствие сети',
     },
   },

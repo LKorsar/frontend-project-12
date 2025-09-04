@@ -165,7 +165,15 @@ const MainPage = () => {
                   <ul id="channels-box" className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
                     {channels.map((channel) => {
                       const channelBtnclass = classNames(
-                        'w-100', 'rounded-0', 'text-start', 'btn',
+                        'w-100', 'rounded-0', 'text-start','btn',
+                        channel.id === activeChannel.id ? 'btn-secondary' : 'btn-light',
+                      );
+                      const channelNameBtnclass = classNames(
+                        'rounded-0','text-start', 'text-truncate','btn',
+                        channel.id === activeChannel.id ? 'btn-secondary' : 'btn-light',
+                      );
+                      const channelToggleBtnClass = classNames(
+                        'text-start', 'text-truncate','btn', 'flex-grow-0',
                         channel.id === activeChannel.id ? 'btn-secondary' : 'btn-light',
                       );
                       if (channel.removable === false) {
@@ -181,13 +189,15 @@ const MainPage = () => {
                       }
                       return (
                         <li key={channel.id} className="nav-item w-100">
-                          <Dropdown as={ButtonGroup}>
-                            <Button type="button" className={channelBtnclass} onClick={() => dispatch(setActiveChannel(channel))}>
+                          <Dropdown as={ButtonGroup} className="d-flex">
+                            <Button type="button" className={channelNameBtnclass} onClick={() => dispatch(setActiveChannel(channel))}>
                               <span className="me-1">#</span>
                               {channel.name}
                             </Button>
-                            <Dropdown.Toggle split className={channelBtnclass} />
-                            <Dropdown.Menu>
+                            <Dropdown.Toggle split className={channelToggleBtnClass}>
+                              <span className="visually-hidden">{t('channels.chManagement')}</span>
+                            </Dropdown.Toggle>  
+                            <Dropdown.Menu className="flex-grow-0">
                               <Dropdown.Item href="#" onClick={() => showModal('removing', channel.id)}>{t('channels.removeBtn')}</Dropdown.Item>
                               <Dropdown.Item href="#" onClick={() => showModal('renaming', channel.id)}>{t('channels.editBtn')}</Dropdown.Item>
                             </Dropdown.Menu>
@@ -239,7 +249,7 @@ const MainPage = () => {
                               d="M 15 2 a 1 1 0 0 0 -1 -1 H 2 a 1 1 0 0 0 -1 1 v 12 a 1 1 0 0 0 1 1 h 12 a 1 1 0 0 0 1 -1 Z M 0 2 a 2 2 0 0 1 2 -2 h 12 a 2 2 0 0 1 2 2 v 12 a 2 2 0 0 1 -2 2 H 2 a 2 2 0 0 1 -2 -2 Z m 4.5 5.5 a 0.5 0.5 0 0 0 0 1 h 5.793 l -2.147 2.146 a 0.5 0.5 0 0 0 0.708 0.708 l 3 -3 a 0.5 0.5 0 0 0 0 -0.708 l -3 -3 a 0.5 0.5 0 1 0 -0.708 0.708 L 10.293 7.5 Z"
                               ></path>
                             </svg>
-                            <span className="visually-hidden">Отправить</span>
+                            <span className="visually-hidden">{t('messages.submitBtn')}</span>
                           </Button>
                         </div>
                       </form>
