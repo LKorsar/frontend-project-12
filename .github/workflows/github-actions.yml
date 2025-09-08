@@ -1,0 +1,13 @@
+name: GitHub Actions
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build
+      run: |
+        npm install
+        npm build
+        make -C frontend dev & npx eslint .
+        make start
