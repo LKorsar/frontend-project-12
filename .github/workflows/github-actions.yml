@@ -9,4 +9,4 @@ jobs:
       run: |
         npm install
         npm run build
-        cd frontend npx eslint .
+        make -C frontend lint
