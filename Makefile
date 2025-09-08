@@ -2,9 +2,9 @@ install:
 	npm ci
 	
 build:
-	npm run build
+	npm run build & make -C frontend dev
 	
-start-backend:
+start:
 	npx start-server -s ./frontend/dist
 
 start-frontend:
