@@ -9,5 +9,4 @@ jobs:
       run: |
         npm install
         npm run build
-        cd frontend & npm init @eslint/config & npx eslint .
         make start
