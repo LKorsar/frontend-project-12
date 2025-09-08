@@ -62,7 +62,6 @@ export default {
       chRemoved: 'Канал удалён',
       chNotRemoved: 'Канал не удален',
       loadingErr: 'Ошибка соединения',
-      networkErr: 'Отсутствие сети',
     },
   },
 };

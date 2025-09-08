@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, ButtonGroup, Dropdown } from 'react-bootstrap';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
@@ -30,13 +30,18 @@ const renderModal = (modalType, handleAddChannel, hideModal, handleRenameChannel
 
 const MainPage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const userId = JSON.parse(localStorage.getItem('token'));
   const currentUser = useSelector((state) => state.authReducer.user);
-  const dispatch = useDispatch();
+  /* const currentUser = JSON.parse(localStorage.getItem('user')); */
+  
   const handleClickLogOut = () => {
     dispatch(logOutSuccess());
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/login');
   };
 
   const { t } = useTranslation();
@@ -130,7 +135,7 @@ const MainPage = () => {
       return <CustomSpinner />;
     }
     if (isErrorChannels) {
-      toast.error(t('notifications.loadingErr'));
+      notify(t('notifications.loadingErr'));
     }
     return (
       <>

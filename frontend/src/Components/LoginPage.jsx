@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form, Button } from 'react-bootstrap';
@@ -18,7 +18,6 @@ const LoginPage = () => {
     inputRef.current.focus();
   }, []);
 
-  const location = useLocation();
   const navigate = useNavigate();
 
   const [authFailed, setAuthFailed] = useState(null);
@@ -33,10 +32,10 @@ const LoginPage = () => {
     onSubmit: async (values) => {
       try {
         const response = await axios.post('/api/v1/login', values);
-        localStorage.setItem('token', JSON.stringify(response.data));
-        logIn(values.username);
-        const { from } = location.state;
-        navigate(from);
+        localStorage.setItem('token', JSON.stringify(response.data.token));
+        localStorage.setItem('user', JSON.stringify(response.data.username));
+        logIn(response.data.username);
+        navigate('/');
       }
       catch(error) {
         formik.setSubmitting(false);

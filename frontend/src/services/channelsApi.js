@@ -7,8 +7,8 @@ export const channelsApi = createApi({
       baseUrl: '/api/v1/channels',
       prepareHeaders: (headers) => {
         const userId = JSON.parse(localStorage.getItem('token'));
-        if (userId && userId.token) {
-          headers.set('authorization', `Bearer ${userId.token}`)
+        if (userId) {
+          headers.set('authorization', `Bearer ${userId}`)
         }
         return headers;
       },

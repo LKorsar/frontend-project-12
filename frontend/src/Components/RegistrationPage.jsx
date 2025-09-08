@@ -41,8 +41,9 @@ const RegistrationPage = () => {
   const handleSubmitForm = async (values, { setFieldError, setSubmitting }) => {
      try {
         const response = await axios.post('/api/v1/signup', { username: values.username, password: values.password });
-        localStorage.setItem('token', JSON.stringify(response.data));
-        logIn(values.username);
+        localStorage.setItem('token', JSON.stringify(response.data.token));
+        localStorage.setItem('user', JSON.stringify(response.data.username));
+        logIn(response.data.username);
         navigate('/');
       } catch (err) {
         if (err.isAxiosError && err.response.status === 409) {
