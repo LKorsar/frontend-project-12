@@ -9,5 +9,5 @@ jobs:
       run: |
         npm install
         npm run build
-        cd frontend dev & make lint
+        make -C frontend lint
         make start
