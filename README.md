@@ -3,6 +3,8 @@
 
 [![Maintainability](https://qlty.sh/gh/LKorsar/projects/frontend-project-12/maintainability.svg)](https://qlty.sh/gh/LKorsar/projects/frontend-project-12)
 
+[![GitHub Actions](https://github.com/LKorsar/frontend-project-12/actions/workflows/github-actions.yml/badge.svg)](https://github.com/LKorsar/frontend-project-12/actions/workflows/github-actions.yml)
+
 # Hexlet chat
 
 ## Description
