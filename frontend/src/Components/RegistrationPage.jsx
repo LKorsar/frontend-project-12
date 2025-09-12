@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -13,7 +13,7 @@ const RegistrationPage = () => {
   const navigate = useNavigate()
 
   const inputRef = useRef()
-  useEffect(() => {
+  React.useEffect(() => {
     inputRef.current.focus()
   }, [])
 
@@ -45,7 +45,7 @@ const RegistrationPage = () => {
       localStorage.setItem('user', JSON.stringify(response.data.username))
       logIn(response.data.username)
       navigate('/')
-    } 
+    }
     catch (err) {
       if (err.isAxiosError && err.response.status === 409) {
         setFieldError('confirmPassword', t('errors.regErr'))

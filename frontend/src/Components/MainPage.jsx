@@ -36,10 +36,10 @@ const MainPage = () => {
   const dispatch = useDispatch()
 
   const userId = JSON.parse(localStorage.getItem('token'))
-  const currentUser = useSelector((state) => state.authReducer.user)
+  const currentUser = useSelector(state => state.authReducer.user)
 
   const handleClickLogOut = () => {
-    dispatch(logOutSuccess());
+    dispatch(logOutSuccess())
     localStorage.removeItem('token')
     localStorage.removeItem('user')
     navigate('/login')
@@ -59,7 +59,8 @@ const MainPage = () => {
       await addNewChannel({ name: newChannel })
       refetchChannels()
       toast.success(t('notifications.chAdded'))
-    } catch (err) {
+    }
+    catch (err) {
       toast.error(t('notifications.chNotAdded'))
       throw err
     }
@@ -71,7 +72,8 @@ const MainPage = () => {
       dispatch(removeChannel(id))
       refetchChannels()
       toast.success(t('notifications.chRemoved'))
-    } catch (err) {
+    }
+    catch (err) {
       toast.error(t('notifications.chNotRemoved'))
       throw err
     }
@@ -80,9 +82,10 @@ const MainPage = () => {
   const handleRenameChannel = async (id, newName) => {
     try {
       await renameChannel({ id: id, name: newName })
-      refetchChannels();
+      refetchChannels()
       toast.success(t('notifications.chEdited'))
-    } catch (err) {
+    }
+    catch (err) {
       toast.error(t('notifications.chNotEdited'))
       throw err
     }
@@ -97,18 +100,18 @@ const MainPage = () => {
     { disabled: newMessage === '' ? true : false },
   )
 
-  const activeChannel = useSelector((state) => state.channelsReducer.activeChannel)
+  const activeChannel = useSelector(state => state.channelsReducer.activeChannel)
 
-  const [messagesCount, setMessagesCount] = useState(0)
+  const [messagesCount, setMessagesCount] = React.useState(0)
   useEffect(() => {
     if (messages && messages.length > 0) {
-      const messagesOfActiveChannel = messages.filter((message) => message.channelId === activeChannel.id)
+      const messagesOfActiveChannel = messages.filter(message => message.channelId === activeChannel.id)
       setMessagesCount(messagesOfActiveChannel.length)
     }
   }, [activeChannel, messages])
 
   const handleSubmitMessage = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     const filteredMessage = filter.clean(newMessage)
     const messageToAdd = { body: filteredMessage, channelId: activeChannel.id, username: currentUser }
     addNewMessage(messageToAdd)
@@ -153,7 +156,7 @@ const MainPage = () => {
                     <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
                       <b>{t('channels.channels')}</b>
                       <Button type="button" className="p-0 text-primary btn btn-light btn-group-vertical" onClick={() => showModal('adding')}>
-                        <svg 
+                        <svg
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 16 16"
                           width="20"
@@ -172,24 +175,27 @@ const MainPage = () => {
                         const channelBtnclass = classNames(
                           'w-100', 'rounded-0', 'text-start', 'btn',
                           channel.id === activeChannel.id ? 'btn-secondary' : 'btn-light',
-                        );
+                        )
                         const channelNameBtnclass = classNames(
-                          'rounded-0','text-start', 'text-truncate', 'btn',
+                          'rounded-0', 'text-start', 'text-truncate', 'btn',
                           channel.id === activeChannel.id ? 'btn-secondary' : 'btn-light',
-                        );
+                        )
                         const channelToggleBtnClass = classNames(
                           'text-start', 'text-truncate', 'btn', 'flex-grow-0',
                           channel.id === activeChannel.id ? 'btn-secondary' : 'btn-light',
-                        );
+                        )
                         if (channel.removable === false) {
                           return (
                             <li key={channel.id} className="nav-item w-100">
                               <Button
-                                type="button" className={channelBtnclass} onClick={() => dispatch(setActiveChannel(channel))}>
+                                type="button"
+                                className={channelBtnclass}
+                                onClick={() => dispatch(setActiveChannel(channel))}
+                              >
                                 <span className="me-1">#</span>
                                 {channel.name}
                               </Button>
-                            </li> 
+                            </li>
                           )
                         }
                         return (
@@ -208,9 +214,8 @@ const MainPage = () => {
                               </Dropdown.Menu>
                             </Dropdown>
                           </li>
-                          )
-                        })
-                      }
+                        )
+                      })}
                     </ul>
                   </div>
                   <div className="col p-0 h-100">
@@ -276,7 +281,7 @@ const MainPage = () => {
     )
   }
   return (
-  <Navigate to='/login' state={{ from: location }} />
+  <Navigate to="/login" state={{ from: location }} />
   )
 }
 
