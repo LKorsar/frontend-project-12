@@ -227,7 +227,7 @@ const MainPage = () => {
                         <span className="text-muted">{t('messages.counter.count', { count: messagesCount })}</span>
                       </div>
                       <div id="messages-box" className="chat-messages overflow-auto px-5">
-                        {messages && messages.filter((message) => message.channelId === activeChannel.id).map((message) => {
+                        {messages && messages.filter(message => message.channelId === activeChannel.id).map((message) => {
                           return (
                             <div key={message.id} className="text-break mb-2">
                               <b>{message.username}</b>
@@ -245,7 +245,7 @@ const MainPage = () => {
                               placeholder={t('messages.input')}
                               className="border-0 p-0 ps-2 form-control"
                               value={newMessage}
-                              onChange={(event) => setNewMessage(event.target.value)}
+                              onChange={event => setNewMessage(event.target.value)}
                             />
                             <Button type="submit" className={messageBtnClass}>
                               <svg
@@ -281,7 +281,7 @@ const MainPage = () => {
     )
   }
   return (
-  <Navigate to="/login" state={{ from: location }} />
+    <Navigate to="/login" state={{ from: location }} />
   )
 }
 

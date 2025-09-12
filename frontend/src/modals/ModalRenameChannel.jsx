@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useContext } from 'react'
+import React, { useEffect, useContext } from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { Modal, Button } from 'react-bootstrap'
 import * as Yup from 'yup'
@@ -36,7 +36,7 @@ const ModalRenameChannel = ({ modalType, onHide, handleRenameChannel }) => {
     }
   }
 
-  const inputRef = useRef()
+  const inputRef = React.useRef()
   useEffect(() => {
     inputRef.current.select()
   }, [])

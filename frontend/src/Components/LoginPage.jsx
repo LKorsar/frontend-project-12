@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -14,7 +14,7 @@ const LoginPage = () => {
   const logOut = () => dispatch(logOutSuccess())
 
   const inputRef = useRef()
-  useEffect(() => {
+  React.useEffect(() => {
     inputRef.current.focus()
   }, [])
 
