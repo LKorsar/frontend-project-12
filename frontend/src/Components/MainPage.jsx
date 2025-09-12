@@ -26,7 +26,8 @@ const renderModal = (modalType, handleAddChannel, hideModal, handleRenameChannel
       onHide={hideModal}
       handleRenameChannel={handleRenameChannel}
       handleDeleteChannel={handleDeleteChannel}
-    />)
+    />
+  )
 }
 
 const MainPage = () => {
@@ -42,7 +43,7 @@ const MainPage = () => {
     localStorage.removeItem('token')
     localStorage.removeItem('user')
     navigate('/login')
-  };
+  }
 
   const { t } = useTranslation()
 
@@ -62,7 +63,8 @@ const MainPage = () => {
       toast.error(t('notifications.chNotAdded'))
       throw err
     }
-  };
+  }
+
   const handleDeleteChannel = async (id) => {
     try {
       await deleteChannel(id)
@@ -73,7 +75,8 @@ const MainPage = () => {
       toast.error(t('notifications.chNotRemoved'))
       throw err
     }
-  };
+  }
+
   const handleRenameChannel = async (id, newName) => {
     try {
       await renameChannel({ id: id, name: newName })
@@ -83,7 +86,7 @@ const MainPage = () => {
       toast.error(t('notifications.chNotEdited'))
       throw err
     }
-  };
+  }
 
   const { data: messages, refetch: refetchMessages } = getMessages()
   const [addNewMessage] = addMessage()
@@ -92,10 +95,10 @@ const MainPage = () => {
   const messageBtnClass = classNames(
     'btn', 'btn-group-vertical', 'btn-light',
     { disabled: newMessage === '' ? true : false },
-  );
+  )
 
   const activeChannel = useSelector((state) => state.channelsReducer.activeChannel)
-  
+
   const [messagesCount, setMessagesCount] = useState(0)
   useEffect(() => {
     if (messages && messages.length > 0) {
@@ -111,20 +114,20 @@ const MainPage = () => {
     addNewMessage(messageToAdd)
     refetchMessages()
     setNewMessage('')
-  };
+  }
 
   const [modalType, setModalType] = useState({ type: null, item: null })
   const hideModal = () => setModalType({ type: null, item: null })
   const showModal = (type, item = 0) => {
     setModalType({ type, item })
-  };
+  }
 
   const notify = (text) => {
     if (isErrorChannels) {
       toast.error(text)
     }
     toast.success(text)
-  };
+  }
 
   if (userId) {
     if (isLoadingChannels) {
@@ -167,15 +170,15 @@ const MainPage = () => {
                     <ul id="channels-box" className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
                       {channels.map((channel) => {
                         const channelBtnclass = classNames(
-                          'w-100', 'rounded-0', 'text-start','btn',
+                          'w-100', 'rounded-0', 'text-start', 'btn',
                           channel.id === activeChannel.id ? 'btn-secondary' : 'btn-light',
                         );
                         const channelNameBtnclass = classNames(
-                          'rounded-0','text-start', 'text-truncate','btn',
+                          'rounded-0','text-start', 'text-truncate', 'btn',
                           channel.id === activeChannel.id ? 'btn-secondary' : 'btn-light',
                         );
                         const channelToggleBtnClass = classNames(
-                          'text-start', 'text-truncate','btn', 'flex-grow-0',
+                          'text-start', 'text-truncate', 'btn', 'flex-grow-0',
                           channel.id === activeChannel.id ? 'btn-secondary' : 'btn-light',
                         );
                         if (channel.removable === false) {
@@ -186,7 +189,7 @@ const MainPage = () => {
                                 <span className="me-1">#</span>
                                 {channel.name}
                               </Button>
-                            </li>    
+                            </li> 
                           )
                         }
                         return (
@@ -198,7 +201,7 @@ const MainPage = () => {
                               </Button>
                               <Dropdown.Toggle split className={channelToggleBtnClass}>
                                 <span className="visually-hidden">{t('channels.chManagement')}</span>
-                              </Dropdown.Toggle>  
+                              </Dropdown.Toggle>
                               <Dropdown.Menu className="flex-grow-0">
                                 <Dropdown.Item href="#" onClick={() => showModal('removing', channel.id)}>{t('channels.removeBtn')}</Dropdown.Item>
                                 <Dropdown.Item href="#" onClick={() => showModal('renaming', channel.id)}>{t('channels.editBtn')}</Dropdown.Item>
@@ -220,10 +223,12 @@ const MainPage = () => {
                       </div>
                       <div id="messages-box" className="chat-messages overflow-auto px-5">
                         {messages && messages.filter((message) => message.channelId === activeChannel.id).map((message) => {
-                          return (<div key={message.id} className="text-break mb-2">
-                            <b>{message.username}</b>
-                            {`: ${message.body}`}
-                          </div>)
+                          return (
+                            <div key={message.id} className="text-break mb-2">
+                              <b>{message.username}</b>
+                              {`: ${message.body}`}
+                            </div>
+                          )
                         })}
                       </div>
                       <div className="mt-auto px-5 py-3">

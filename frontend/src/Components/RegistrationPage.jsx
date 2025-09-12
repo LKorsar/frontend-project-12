@@ -17,8 +17,8 @@ const RegistrationPage = () => {
     inputRef.current.focus()
   }, [])
 
-  const dispatch = useDispatch();
-  const logIn = (user) => dispatch(logInSuccess({ username: user }))
+  const dispatch = useDispatch()
+  const logIn = user => dispatch(logInSuccess({ username: user }))
 
   const { t } = useTranslation()
 
@@ -39,7 +39,7 @@ const RegistrationPage = () => {
   })
 
   const handleSubmitForm = async (values, { setFieldError, setSubmitting }) => {
-     try {
+    try {
       const response = await axios.post('/api/v1/signup', { username: values.username, password: values.password })
       localStorage.setItem('token', JSON.stringify(response.data.token))
       localStorage.setItem('user', JSON.stringify(response.data.username))

@@ -9,7 +9,7 @@ const run = async () => {
   const app = await init(socket)
   createRoot(document.getElementById('root')).render(
     <StrictMode>
-     {app}
+      {app}
     </StrictMode>,
   )
 }

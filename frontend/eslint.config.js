@@ -7,12 +7,12 @@ export default defineConfig([
   { files: ['**/*.{js,mjs,cjs,jsx}'], plugins: { js }, extends: ['js/recommended'] },
   { files: ['**/*.{js,mjs,cjs,jsx}'], languageOptions: { globals: globals.browser } },
   {
-	  ignores: ['dist/*', 'build/*', '/node_modules/*'],
-	},
+    ignores: ['dist/*', 'build/*', '/node_modules/*'],
+  },
   {
-    'settings': {
-      'react': {
-        'version': 'detect',
+    settings: {
+      react: {
+        version: detect,
       },
     },
   },

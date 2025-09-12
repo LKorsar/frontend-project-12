@@ -11,8 +11,8 @@ const ModalRenameChannel = ({ modalType, onHide, handleRenameChannel }) => {
   const { t } = useTranslation()
   const filter = useContext(FilterContext)
   const { data: channels } = useGetChannelsQuery()
-  const channelsNames = channels.map((ch) => ch.name)
-  const currentChannel = channels.filter((ch) => ch.id === modalType.item)
+  const channelsNames = channels.map(ch => ch.name)
+  const currentChannel = channels.filter(ch => ch.id === modalType.item)
   const curChannelName = currentChannel[0].name
   const schema = Yup.object().shape({
     channel: Yup.string()
@@ -22,7 +22,7 @@ const ModalRenameChannel = ({ modalType, onHide, handleRenameChannel }) => {
       .max(20)
       .notOneOf(channelsNames),
   })
-  
+
   const handleSubmitForm = (values, { setSubmitting }) => {
     try {
       const filteredValue = filter.clean(values.channel)
@@ -33,11 +33,11 @@ const ModalRenameChannel = ({ modalType, onHide, handleRenameChannel }) => {
       inputRef.current.select()
       throw err
     }
-  };
-  
+  }
+
   const inputRef = useRef()
-    useEffect(() => {
-      inputRef.current.select()
+  useEffect(() => {
+    inputRef.current.select()
   }, [])
 
   return (
@@ -52,7 +52,7 @@ const ModalRenameChannel = ({ modalType, onHide, handleRenameChannel }) => {
           onSubmit={handleSubmitForm}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
-              handleSubmitForm;
+              handleSubmitForm
             }
           }}
         >

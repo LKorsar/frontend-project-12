@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next'
 import { logInSuccess, logOutSuccess } from '../Slices/authSlice.js'
 
 const LoginPage = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   const logIn = user => dispatch(logInSuccess({ username: user }))
   const logOut = () => dispatch(logOutSuccess())
 

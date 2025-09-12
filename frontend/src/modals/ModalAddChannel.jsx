@@ -11,7 +11,7 @@ const ModalAddChannel = ({ onHide, handleAddChannel }) => {
   const { t } = useTranslation()
   const filter = useContext(FilterContext)
   const { data: channels } = useGetChannelsQuery()
-  const channelsNames = channels.map((ch) => ch.name)
+  const channelsNames = channels.map(ch => ch.name)
   const schema = Yup.object().shape({
     channel: Yup.string()
       .trim()
@@ -50,7 +50,7 @@ const ModalAddChannel = ({ onHide, handleAddChannel }) => {
           onSubmit={handleSubmitForm}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
-              handleSubmitForm;
+              handleSubmitForm
             }
           }}
         >
@@ -61,7 +61,7 @@ const ModalAddChannel = ({ onHide, handleAddChannel }) => {
                 id="channel"
                 type="text"
                 className={`form-control ${
-                  touched.channel && errors.channel ? "is-invalid" : ""
+                  touched.channel && errors.channel ? 'is-invalid' : ''
                 } mb-2`}
                 ref={inputRef}
               />

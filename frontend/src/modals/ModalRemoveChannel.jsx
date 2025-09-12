@@ -36,7 +36,7 @@ const ModalRemoveChannel = ({ modalType, onHide, handleDeleteChannel }) => {
         </Formik>
       </Modal.Body>
     </Modal>
-    )
+  )
 }
 
 ModalRemoveChannel.propTypes = {
