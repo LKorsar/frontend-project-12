@@ -1,5 +1,5 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import React from 'react'
 
 const Page404 = () => {
   return (
@@ -21,8 +21,8 @@ const Page404 = () => {
           </div>
         </div>
       </div>
-    </div>  
-  );
-};
+    </div>
+  )
+}
 
-export default Page404;
+export default Page404

@@ -1,53 +1,53 @@
-import React, { useRef, useEffect, useState } from "react";
-import { useNavigate } from 'react-router-dom';
-import { useFormik } from 'formik';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Form, Button } from 'react-bootstrap';
-import axios from 'axios';
-import { useDispatch } from 'react-redux';
-import { useTranslation } from "react-i18next";
-import { logInSuccess, logOutSuccess } from '../Slices/authSlice.js';
+import React, { useRef, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useFormik } from 'formik'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import { Form, Button } from 'react-bootstrap'
+import axios from 'axios'
+import { useDispatch } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+import { logInSuccess, logOutSuccess } from '../Slices/authSlice.js'
 
 const LoginPage = () => {
   const dispatch = useDispatch();
-  const logIn = (user) => dispatch(logInSuccess({ username: user }));
-  const logOut = () => dispatch(logOutSuccess());
+  const logIn = user => dispatch(logInSuccess({ username: user }))
+  const logOut = () => dispatch(logOutSuccess())
 
-  const inputRef = useRef();
+  const inputRef = useRef()
   useEffect(() => {
-    inputRef.current.focus();
-  }, []);
+    inputRef.current.focus()
+  }, [])
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
-  const [authFailed, setAuthFailed] = useState(null);
+  const [authFailed, setAuthFailed] = useState(null)
 
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   const formik = useFormik({
     initialValues: {
-        username: '',
-        password: '',
+      username: '',
+      password: '',
     },
     onSubmit: async (values) => {
       try {
-        const response = await axios.post('/api/v1/login', values);
-        localStorage.setItem('token', JSON.stringify(response.data.token));
-        localStorage.setItem('user', JSON.stringify(response.data.username));
-        logIn(response.data.username);
-        navigate('/');
+        const response = await axios.post('/api/v1/login', values)
+        localStorage.setItem('token', JSON.stringify(response.data.token))
+        localStorage.setItem('user', JSON.stringify(response.data.username))
+        logIn(response.data.username)
+        navigate('/')
       }
-      catch(error) {
-        formik.setSubmitting(false);
+      catch (error) {
+        formik.setSubmitting(false)
         if (error.isAxiosError && error.response.status === 401) {
-          logOut();
-          setAuthFailed(true);
-          inputRef.current.select();
+          logOut()
+          setAuthFailed(true)
+          inputRef.current.select()
         }
-        throw error;
+        throw error
       }
     },
-  });
+  })
 
   return (
     <div className="h-100">
@@ -79,7 +79,7 @@ const LoginPage = () => {
                           value={formik.values.username}
                           onChange={formik.handleChange}
                           ref={inputRef}
-                        ></Form.Control>
+                        />
                         <Form.Label htmlFor="username">{t('loginForm.usernameInput')}</Form.Label>
                       </Form.Group>
                       <Form.Group className="form-floating mb-4">
@@ -93,7 +93,7 @@ const LoginPage = () => {
                           value={formik.values.password}
                           isInvalid={authFailed}
                           onChange={formik.handleChange}
-                        ></Form.Control>
+                        />
                         <Form.Label htmlFor="password">{t('loginForm.passwordInput')}</Form.Label>
                         <Form.Control.Feedback type="invalid">{t('errors.authErr')}</Form.Control.Feedback>
                       </Form.Group>
@@ -114,7 +114,7 @@ const LoginPage = () => {
         <div className="Toastify"></div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default LoginPage;
+export default LoginPage

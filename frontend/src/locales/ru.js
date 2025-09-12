@@ -64,4 +64,4 @@ export default {
       loadingErr: 'Ошибка соединения',
     },
   },
-};
+}
