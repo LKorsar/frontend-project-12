@@ -1,5 +1,5 @@
 import store from './Slices/index';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import i18next from 'i18next';
 import { initReactI18next, I18nextProvider } from 'react-i18next';
@@ -21,6 +21,7 @@ const init = async (socket) => {
         undefined,
         (draftMessage) => {
           draftMessage.push(payload);
+          console.log(payload);
         },
       ),
     );
@@ -61,14 +62,11 @@ const init = async (socket) => {
       ),
     );
   };
+
   socket.on('newMessage', handleNewMessage);
   socket.on('newChannel', handleNewChannel);
   socket.on('renameChannel', handleEditChannel);
   socket.on('removeChannel', handleRemoveChannel);
-  socket.off('newMessage', handleNewMessage);
-  socket.off('newChannel', handleNewChannel);
-  socket.off('renameChannel', handleEditChannel);
-  socket.off('removeChannel', handleRemoveChannel);
 
   const i18n = i18next.createInstance();
   await i18n
