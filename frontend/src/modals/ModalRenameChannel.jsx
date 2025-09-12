@@ -28,7 +28,8 @@ const ModalRenameChannel = ({ modalType, onHide, handleRenameChannel }) => {
       const filteredValue = filter.clean(values.channel)
       handleRenameChannel(modalType.item, filteredValue)
       onHide()
-    } catch (err) {
+    }
+    catch (err) {
       setSubmitting(false)
       inputRef.current.select()
       throw err

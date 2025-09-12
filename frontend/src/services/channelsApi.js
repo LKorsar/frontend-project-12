@@ -14,7 +14,7 @@ export const channelsApi = createApi({
     },
   }),
   tagTypes: ['Channel'],
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     getChannels: builder.query({
       query: () => '',
     }),
@@ -41,7 +41,8 @@ export const channelsApi = createApi({
           const { data } = await queryFulfilled
           dispatch(setActiveChannel(data))
           console.log('Канал переименован')
-        } catch (err) {
+        }
+        catch (err) {
           console.log('Канал не изменен')
           throw err
         }

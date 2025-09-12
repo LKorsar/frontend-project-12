@@ -35,7 +35,7 @@ const App = () => {
             </PrivateRoot>
           )}
         >
-        </Route>  
+        </Route>
       </Routes>
     </BrowserRouter>
   )

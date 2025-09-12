@@ -26,7 +26,8 @@ const ModalAddChannel = ({ onHide, handleAddChannel }) => {
       const filteredValue = filter.clean(values.channel)
       await handleAddChannel(filteredValue)
       onHide()
-    } catch (err) {
+    }
+    catch (err) {
       setSubmitting(false)
       inputRef.current.select()
       throw err
