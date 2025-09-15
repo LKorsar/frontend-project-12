@@ -1,6 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
+import { useTranslation } from 'react-i18next'
 
 const Page404 = () => {
+  const { t } = useTranslation()
   return (
     <div className="h-100">
       <div className="h-100" id="chat">
@@ -12,10 +14,10 @@ const Page404 = () => {
           </nav>
           <div className="text-center">
             <img alt="Страница не найдена" className="image-fluid h-25" src="/src/assets/404.jpg"></img>
-            <h1 className="h-4 text-muted">Страница не найдена</h1>
+            <h1 className="h-4 text-muted">{t('page404.header')}</h1>
             <p className="text-muted">
-              Но вы можете перейти
-              <a href="/"> на главную страницу</a>
+              {t('page404.text')}
+              <a href="/">{t('page404.linkText')}</a>
             </p>
           </div>
         </div>

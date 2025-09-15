@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import PropTypes from 'prop-types'
 import LoginPage from './Components/LoginPage'
 import Page404 from './Components/Page404'
 import MainPage from './Components/MainPage'
@@ -13,10 +12,6 @@ const PrivateRoot = ({ children }) => {
   return (
     userId ? children : <Navigate to="/login" state={{ from: location }} />
   )
-}
-
-PrivateRoot.propTypes = {
-  children: PropTypes.node.isRequired,
 }
 
 const App = () => {

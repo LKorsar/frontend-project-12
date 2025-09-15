@@ -2,7 +2,6 @@ import { useEffect, useContext, useRef } from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { Modal, Button } from 'react-bootstrap'
 import * as Yup from 'yup'
-import PropTypes from 'prop-types'
 import { useTranslation } from 'react-i18next'
 import { useGetChannelsQuery } from '../services/channelsApi.js'
 import FilterContext from '../contexts/index.jsx'
@@ -80,11 +79,6 @@ const ModalAddChannel = ({ onHide, handleAddChannel }) => {
       </Modal.Body>
     </Modal>
   )
-}
-
-ModalAddChannel.propTypes = {
-  onHide: PropTypes.func,
-  handleAddChannel: PropTypes.func,
 }
 
 export default ModalAddChannel

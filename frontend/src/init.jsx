@@ -5,7 +5,6 @@ import { initReactI18next, I18nextProvider } from 'react-i18next'
 import * as Yup from 'yup'
 import * as leoProfanity from 'leo-profanity'
 import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react'
-import PropTypes from 'prop-types'
 import { messagesApi } from './services/messagesApi.js'
 import { channelsApi } from './services/channelsApi.js'
 import resources from './locales/index.js'
@@ -100,9 +99,6 @@ const init = async (socket) => {
         {children}
       </FilterContext.Provider>
     )
-  }
-  FilterProvider.propTypes = {
-    children: PropTypes.node.isRequired,
   }
 
   const rollbarConfig = {

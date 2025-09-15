@@ -1,7 +1,6 @@
 import { Modal, Button } from 'react-bootstrap'
 import { Formik, Form } from 'formik'
 import { useDispatch } from 'react-redux'
-import PropTypes from 'prop-types'
 import { useTranslation } from 'react-i18next'
 import { setActiveChannel } from '../Slices/channelsSlice'
 import { useGetChannelsQuery } from '../services/channelsApi'
@@ -36,12 +35,6 @@ const ModalRemoveChannel = ({ modalType, onHide, handleDeleteChannel }) => {
       </Modal.Body>
     </Modal>
   )
-}
-
-ModalRemoveChannel.propTypes = {
-  modalType: PropTypes.object,
-  onHide: PropTypes.func,
-  handleDeleteChannel: PropTypes.func,
 }
 
 export default ModalRemoveChannel

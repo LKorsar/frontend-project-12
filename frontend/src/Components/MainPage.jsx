@@ -83,6 +83,7 @@ const MainPage = () => {
     try {
       await renameChannel({ id: id, name: newName })
       refetchChannels()
+      console.log(channels);
       toast.success(t('notifications.chEdited'))
     }
     catch (err) {

@@ -2,7 +2,6 @@ import { useEffect, useContext, useRef } from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { Modal, Button } from 'react-bootstrap'
 import * as Yup from 'yup'
-import PropTypes from 'prop-types'
 import { useTranslation } from 'react-i18next'
 import { useGetChannelsQuery } from '../services/channelsApi'
 import FilterContext from '../contexts'
@@ -82,12 +81,6 @@ const ModalRenameChannel = ({ modalType, onHide, handleRenameChannel }) => {
       </Modal.Body>
     </Modal>
   )
-}
-
-ModalRenameChannel.propTypes = {
-  modalType: PropTypes.object,
-  onHide: PropTypes.func,
-  handleRenameChannel: PropTypes.func,
 }
 
 export default ModalRenameChannel
