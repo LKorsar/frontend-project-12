@@ -1,5 +1,4 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
-import React from 'react'
 
 const Page404 = () => {
   return (

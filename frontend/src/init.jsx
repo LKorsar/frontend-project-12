@@ -1,5 +1,4 @@
 import store from './Slices/index'
-import React from 'react'
 import { Provider } from 'react-redux'
 import i18next from 'i18next'
 import { initReactI18next, I18nextProvider } from 'react-i18next'

@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Button, ButtonGroup, Dropdown } from 'react-bootstrap'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
-import React, { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
 import { useTranslation } from 'react-i18next'
@@ -102,7 +102,7 @@ const MainPage = () => {
 
   const activeChannel = useSelector(state => state.channelsReducer.activeChannel)
 
-  const [messagesCount, setMessagesCount] = React.useState(0)
+  const [messagesCount, setMessagesCount] = useState(0)
   useEffect(() => {
     if (messages && messages.length > 0) {
       const messagesOfActiveChannel = messages.filter(message => message.channelId === activeChannel.id)

@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import React from 'react'
 import PropTypes from 'prop-types'
 import LoginPage from './Components/LoginPage'
 import Page404 from './Components/Page404'

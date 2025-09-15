@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import { useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -13,7 +13,7 @@ const RegistrationPage = () => {
   const navigate = useNavigate()
 
   const inputRef = useRef()
-  React.useEffect(() => {
+  useEffect(() => {
     inputRef.current.focus()
   }, [])
 

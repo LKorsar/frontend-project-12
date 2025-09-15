@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react'
+import { useEffect, useContext, useRef } from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { Modal, Button } from 'react-bootstrap'
 import * as Yup from 'yup'
@@ -34,7 +34,7 @@ const ModalAddChannel = ({ onHide, handleAddChannel }) => {
     }
   }
 
-  const inputRef = React.useRef()
+  const inputRef = useRef()
   useEffect(() => {
     inputRef.current.focus()
   }, [])
