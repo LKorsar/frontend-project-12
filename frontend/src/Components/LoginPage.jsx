@@ -71,7 +71,6 @@ const LoginPage = () => {
                       <Form.Group className="form-floating mb-3">
                         <Form.Control
                           name="username"
-                          autoComplete="username"
                           required
                           placeholder="Ваш ник"
                           id="username"
@@ -85,7 +84,6 @@ const LoginPage = () => {
                       <Form.Group className="form-floating mb-4">
                         <Form.Control
                           name="password"
-                          autoComplete="current-password"
                           required
                           placeholder="Пароль"
                           type="password"

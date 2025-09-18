@@ -92,7 +92,6 @@ const RegistrationPage = () => {
                             <Field
                               name="username"
                               id="username"
-                              autoComplete="username"
                               placeholder="От 3 до 20 символов"
                               ref={inputRef}
                               className={`form-control ${
@@ -112,7 +111,6 @@ const RegistrationPage = () => {
                               name="password"
                               type="password"
                               id="password"
-                              autoComplete="new-password"
                               placeholder="Не менее 6 символов"
                               className={`form-control ${
                                 touched.password && errors.password ? 'is-invalid' : ''
@@ -130,7 +128,6 @@ const RegistrationPage = () => {
                               name="confirmPassword"
                               id="confirmPassword"
                               type="password"
-                              autoComplete="new-password"
                               placeholder="Пароли должны совпадать"
                               className={`form-control ${
                                 touched.confirmPassword && errors.confirmPassword ? 'is-invalid' : ''
