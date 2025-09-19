@@ -107,6 +107,13 @@ const MainPage = () => {
     { disabled: newMessage === '' ? true : false },
   )
 
+  const messageInputRef = useRef(null)
+  useEffect(() => {
+    if (messageInputRef.current) {
+      messageInputRef.current.focus()
+    }
+  })
+
   const activeChannel = useSelector(state => state.channelsReducer.activeChannel)
 
   const [messagesCount, setMessagesCount] = useState(0)
@@ -260,6 +267,7 @@ const MainPage = () => {
                               className="border-0 p-0 ps-2 form-control"
                               value={newMessage}
                               onChange={event => setNewMessage(event.target.value)}
+                              ref={messageInputRef}
                             />
                             <Button type="submit" className={messageBtnClass}>
                               <svg
