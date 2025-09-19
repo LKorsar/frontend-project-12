@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Button, ButtonGroup, Dropdown } from 'react-bootstrap'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
 import { useTranslation } from 'react-i18next'
@@ -91,6 +91,13 @@ const MainPage = () => {
     }
   }
 
+  const channelsBoxRef = useRef(null)
+  useEffect(() => {
+    if (channelsBoxRef.current) {
+      channelsBoxRef.current.scrollTop = channelsBoxRef.current.scrollHeight
+    }
+  }, [channels])
+
   const { data: messages, refetch: refetchMessages } = getMessages()
   const [addNewMessage] = addMessage()
   const [newMessage, setNewMessage] = useState('')
@@ -118,6 +125,13 @@ const MainPage = () => {
     refetchMessages()
     setNewMessage('')
   }
+
+  const messageBoxRef = useRef(null)
+  useEffect(() => {
+    if (messageBoxRef.current) {
+      messageBoxRef.current.scrollTop = messageBoxRef.current.scrollHeight
+    }
+  }, [messages])
 
   const [modalType, setModalType] = useState({ type: null, item: null })
   const hideModal = () => setModalType({ type: null, item: null })
@@ -170,7 +184,7 @@ const MainPage = () => {
                         <span className="visually-hidden">+</span>
                       </Button>
                     </div>
-                    <ul id="channels-box" className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
+                    <ul id="channels-box" className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block" ref={channelsBoxRef}>
                       {channels.map((channel) => {
                         const channelBtnclass = classNames(
                           'w-100', 'rounded-0', 'text-start', 'btn',
@@ -226,7 +240,7 @@ const MainPage = () => {
                         </p>
                         <span className="text-muted">{t('messages.counter.count', { count: messagesCount })}</span>
                       </div>
-                      <div id="messages-box" className="chat-messages overflow-auto px-5">
+                      <div id="messages-box" className="chat-messages overflow-auto px-5" ref={messageBoxRef}>
                         {messages && messages.filter(message => message.channelId === activeChannel.id).map((message) => {
                           return (
                             <div key={message.id} className="text-break mb-2">
