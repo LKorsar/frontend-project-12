@@ -204,7 +204,7 @@ const MainPage = () => {
   }
 
   useEffect(() => {
-    const socket = io('http://localhost:5001', { transports: ['websocket'] })
+    const socket = io('http://localhost:5001', { transports: ['polling', 'websocket'] })
     socket.on('newMessage', handleNewMessageSocket)
     socket.on('newChannel', handleNewChannelSocket)
     socket.on('renameChannel', handleEditChannelSocket)
@@ -216,7 +216,7 @@ const MainPage = () => {
       socket.off('renameChannel', handleEditChannelSocket)
       socket.off('removeChannel', handleRemoveChannelSocket)
     }
-  })
+  }, [])
 
   if (userId) {
     if (isLoadingChannels) {
