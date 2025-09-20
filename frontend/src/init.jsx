@@ -11,61 +11,7 @@ import resources from './locales/index.js'
 import App from './App.jsx'
 import FilterContext from './contexts/index.jsx'
 
-const init = async (socket) => {
-  const handleNewMessage = (payload) => {
-    store.dispatch(
-      messagesApi.util.updateQueryData(
-        'getMessages',
-        undefined,
-        (draftMessage) => {
-          draftMessage.push(payload)
-          console.log(payload)
-        },
-      ),
-    )
-  }
-
-  const handleNewChannel = (payload) => {
-    store.dispatch(
-      channelsApi.util.updateQueryData(
-        'getChannels',
-        undefined,
-        (draftChannel) => {
-          draftChannel.push(payload)
-        },
-      ),
-    )
-  }
-
-  const handleEditChannel = (payload) => {
-    store.dispatch(
-      channelsApi.util.updateQueryData(
-        'getChannels',
-        undefined,
-        (draftChannel) => {
-          draftChannel.push(payload)
-        },
-      ),
-    )
-  }
-
-  const handleRemoveChannel = (payload) => {
-    store.dispatch(
-      channelsApi.util.updateQueryData(
-        'getChannels',
-        undefined,
-        (draftChannel) => {
-          draftChannel.push(payload)
-        },
-      ),
-    )
-  }
-
-  socket.on('newMessage', handleNewMessage)
-  socket.on('newChannel', handleNewChannel)
-  socket.on('renameChannel', handleEditChannel)
-  socket.on('removeChannel', handleRemoveChannel)
-
+const init = async () => {
   const i18n = i18next.createInstance()
   await i18n
     .use(initReactI18next)

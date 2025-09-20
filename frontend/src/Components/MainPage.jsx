@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
 import { useTranslation } from 'react-i18next'
 import { ToastContainer, toast } from 'react-toastify'
+import io from 'socket.io-client'
 import { useGetChannelsQuery, useAddChannelMutation, useEditChannelMutation, useRemoveChannelMutation } from '../services/channelsApi.js'
 import { logOutSuccess } from '../Slices/authSlice.js'
 import { getMessages, addMessage } from '../services/messagesApi.js'
@@ -13,6 +14,7 @@ import { setActiveChannel, removeChannel } from '../Slices/channelsSlice.js'
 import CustomSpinner from './Spinner.jsx'
 import chooseModal from '../modals/index.js'
 import FilterContext from '../contexts/index.jsx'
+import store from '../Slices/index.js'
 
 const renderModal = (modalType, handleAddChannel, hideModal, handleRenameChannel, handleDeleteChannel) => {
   if (!modalType.type) {
@@ -152,6 +154,69 @@ const MainPage = () => {
     }
     toast.success(text)
   }
+
+  const handleNewMessageSocket = (payload) => {
+    store.dispatch(
+      messagesApi.util.updateQueryData(
+        'getMessages',
+        undefined,
+        (draftMessage) => {
+          draftMessage.push(payload)
+        },
+      ),
+    )
+  }
+  
+  const handleNewChannelSocket = (payload) => {
+    store.dispatch(
+      channelsApi.util.updateQueryData(
+        'getChannels',
+        undefined,
+        (draftChannel) => {
+          draftChannel.push(payload)
+        },
+      ),
+    )
+  }
+  
+  const handleEditChannelSocket = (payload) => {
+    store.dispatch(
+      channelsApi.util.updateQueryData(
+        'getChannels',
+        undefined,
+        (draftChannel) => {
+          draftChannel.push(payload)
+        },
+      ),
+    )
+  }
+  
+  const handleRemoveChannelSocket = (payload) => {
+    store.dispatch(
+      channelsApi.util.updateQueryData(
+        'getChannels',
+        undefined,
+        (draftChannel) => {
+          draftChannel.push(payload)
+        },
+      ),
+    )
+  }
+
+  useEffect(() => {
+    const socket = io('http://localhost:5001', { transports: ['websocket'] })
+    socket.on('newMessage', handleNewMessageSocket)
+    socket.on('newChannel', handleNewChannelSocket)
+    socket.on('renameChannel', handleEditChannelSocket)
+    socket.on('removeChannel', handleRemoveChannelSocket)
+
+    return () => {
+      socket.off('newMessage', handleNewMessageSocket)
+      socket.off('newChannel', handleNewChannelSocket)
+      socket.off('renameChannel', handleEditChannelSocket)
+      socket.off('removeChannel', handleRemoveChannelSocket)
+    }
+  })
 
   if (userId) {
     if (isLoadingChannels) {
